@@ -1,0 +1,3 @@
+class Match < ApplicationRecord
+
+end
