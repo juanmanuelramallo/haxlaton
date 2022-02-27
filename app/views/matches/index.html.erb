@@ -5,7 +5,7 @@
     <p><%= l match.created_at %></p>
 
     <% if match.recording.attached? %>
-      <%= link_to "http://haxball.com/replay?v=3##{rails_blob_url(match.recording)}", class: "hover:underline text-blue-500", target: :_blank do %>
+      <%= link_to "https://haxball.com/replay?v=3##{rails_blob_url(match.recording, disposition: :attachment)}", class: "hover:underline text-blue-500", target: :_blank, protocol: :https do %>
         <span class="inline">Replay</span>
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline" viewBox="0 0 20 20" fill="currentColor">
           <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />

@@ -17,6 +17,7 @@ require "action_cable/engine"
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
+Dotenv::Railtie.load
 
 module Haxlaton
   class Application < Rails::Application
@@ -33,5 +34,7 @@ module Haxlaton
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    config.hosts << ENV.fetch("HOST_NAME")
   end
 end
