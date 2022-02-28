@@ -25,6 +25,8 @@ class MatchPlayer < ApplicationRecord
 
   accepts_nested_attributes_for :player
 
+  validates :player_id, uniqueness: { scope: :match_id }
+
   enum team_id: {
     spectator: 0,
     red: 1,

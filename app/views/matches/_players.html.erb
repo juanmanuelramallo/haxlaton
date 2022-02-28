@@ -1,0 +1,12 @@
+<% if players.blank? %>
+  <p class="text-gray-300">No players</p>
+<% else %>
+  <ul>
+    <% players.each do |player| %>
+      <li>
+        <span class="text-gray-500 text-xs">#<%= player.id %></span>
+        <%= player.name %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

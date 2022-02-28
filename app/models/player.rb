@@ -8,4 +8,6 @@
 #  updated_at :datetime         not null
 #
 class Player < ApplicationRecord
+  validates :name, presence: true
+  validates :name, uniqueness: true
 end
