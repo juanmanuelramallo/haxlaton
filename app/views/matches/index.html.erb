@@ -17,3 +17,6 @@
     <% end %>
   </div>
 <% end %>
+
+<%== pagy_info(@pagy, item_name: "Match".pluralize(@pagy.count)) %>
+<%== pagy_nav(@pagy) %>

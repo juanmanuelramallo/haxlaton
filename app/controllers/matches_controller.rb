@@ -1,5 +1,5 @@
 class MatchesController < ApplicationController
   def index
-    @matches = Match.all
+    @pagy, @matches = pagy(Match.all.order(created_at: :desc))
   end
 end
