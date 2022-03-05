@@ -12,7 +12,7 @@ module API
       end
 
       if @match.save
-        render json: @match
+        render json: @match, status: :created
       else
         render json: @match.errors, status: :unprocessable_entity
       end
