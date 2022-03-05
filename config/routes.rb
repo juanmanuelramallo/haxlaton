@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   end
 
   resources :matches, only: [:index, :destroy]
+  resources :players, only: [:index]
 
   root to: "matches#index"
 end

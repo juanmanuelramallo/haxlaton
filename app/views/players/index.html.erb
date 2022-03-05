@@ -1,0 +1,24 @@
+<h1 class="text-xl font-bold mb-8">Players</h1>
+
+<table class="table-auto border">
+  <thead>
+    <% th_classes = "py-2 px-4 text-left border border-gray-200 bg-gray-100" %>
+    <tr>
+      <th class="<%= th_classes %>">ID</th>
+      <th class="<%= th_classes %>">Name</th>
+      <th class="<%= th_classes %>">Elo</th>
+      <th class="<%= th_classes %>">Matches</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% td_classes = "py-2 px-4 border border-gray-200" %>
+    <% @players.each do |player| %>
+      <tr>
+        <td class="<%= td_classes %>"><%= player.id %></td>
+        <td class="<%= td_classes %>"><%= player.name %></td>
+        <td class="<%= td_classes %>"><%= player.elo %></td>
+        <td class="<%= td_classes %>"><%= player.matches.count %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
