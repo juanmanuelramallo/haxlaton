@@ -7,6 +7,7 @@ gem "aws-sdk-s3", require: false
 gem "bootsnap", require: false
 gem "chusaku"
 gem "dotenv-rails"
+gem "madmin"
 gem "jbuilder"
 gem "jsbundling-rails"
 gem "pagy"

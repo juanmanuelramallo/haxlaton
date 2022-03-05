@@ -9,9 +9,8 @@
 #  updated_at :datetime         not null
 #
 class Player < ApplicationRecord
-  has_many :match_players
+  has_many :match_players, dependent: :destroy
   has_many :matches, through: :match_players
-  has_many :elo_changes, dependent: :destroy
 
   validates :name, presence: true
   validates :name, uniqueness: true
