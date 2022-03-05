@@ -10,12 +10,14 @@ RSpec.describe API::MatchesController, type: :request do
           match_players_attributes: [
             {
               team_id: "red",
+              elo_change: 25,
               player_attributes: {
                 name: "El Bicho"
               }
             },
             {
               team_id: "blue",
+              elo_change: 5,
               player_attributes: {
                 name: "Kerry"
               }
@@ -37,6 +39,18 @@ RSpec.describe API::MatchesController, type: :request do
       expect(Player.count).to eq(2)
     end
 
+    it "creates elo changes" do
+      expect(EloChange.count).to eq(0)
+
+      subject
+
+      expect(EloChange.count).to eq(2)
+      expect(EloChange.all).to contain_exactly(
+        have_attributes(value: 25),
+        have_attributes(value: 5)
+      )
+    end
+
     context "when a player already exists" do
       let!(:player) { create(:player, name: "El Bicho") }
 
@@ -51,6 +65,18 @@ RSpec.describe API::MatchesController, type: :request do
         expect(Match.last.match_players.count).to eq(2)
         expect(Player.count).to eq(2)
         expect(Player.where(name: "El Bicho").count).to eq(1)
+      end
+
+      it "creates elo changes for both players" do
+        expect(EloChange.count).to eq(0)
+
+        subject
+
+        expect(EloChange.count).to eq(2)
+        expect(EloChange.all).to contain_exactly(
+          have_attributes(value: 25),
+          have_attributes(value: 5)
+        )
       end
     end
   end

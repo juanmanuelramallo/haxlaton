@@ -8,10 +8,16 @@ module API
 
         next unless existing_player.present?
 
+        elo_change = match_player.elo_change
         match_player.player = existing_player
+        match_player.elo_change = elo_change
       end
 
       if @match.save
+        @match.match_players.each do |match_player|
+          EloChange.create(match: @match, player: match_player.player, value: match_player.elo_change.to_i)
+        end
+
         render json: @match, status: :created
       else
         render json: @match.errors, status: :unprocessable_entity
@@ -21,7 +27,16 @@ module API
     private
 
     def match_params
-      params.require(:match).permit(:recording, match_players_attributes: [:team_id, {player_attributes: [:name]}])
+      params.require(:match).permit(
+        :recording,
+        match_players_attributes: [
+          :team_id,
+          :elo_change,
+          {
+            player_attributes: [:name]
+          }
+        ]
+      )
     end
   end
 end

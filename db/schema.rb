@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_03_05_163719) do
+ActiveRecord::Schema[7.0].define(version: 2022_03_05_170651) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -42,6 +42,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_05_163719) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "elo_changes", force: :cascade do |t|
+    t.bigint "match_id", null: false
+    t.bigint "player_id", null: false
+    t.integer "value", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["match_id"], name: "index_elo_changes_on_match_id"
+    t.index ["player_id"], name: "index_elo_changes_on_player_id"
+  end
+
   create_table "match_players", force: :cascade do |t|
     t.bigint "match_id", null: false
     t.bigint "player_id", null: false
@@ -66,6 +76,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_05_163719) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "elo_changes", "matches"
+  add_foreign_key "elo_changes", "players"
   add_foreign_key "match_players", "matches"
   add_foreign_key "match_players", "players"
 end

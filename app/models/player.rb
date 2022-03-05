@@ -9,6 +9,8 @@
 #  updated_at :datetime         not null
 #
 class Player < ApplicationRecord
+  has_many :elo_changes, dependent: :destroy
+
   validates :name, presence: true
   validates :name, uniqueness: true
   validates :elo, numericality: { greater_than_or_equal_to: 0 }
