@@ -14,10 +14,6 @@ module API
       end
 
       if @match.save
-        @match.match_players.each do |match_player|
-          EloChange.create(match: @match, player: match_player.player, value: match_player.elo_change.to_i)
-        end
-
         render json: @match, status: :created
       else
         render json: @match.errors, status: :unprocessable_entity
@@ -31,7 +27,9 @@ module API
         :recording,
         match_players_attributes: [
           :team_id,
-          :elo_change,
+          {
+            elo_change_attributes: [:value]
+          },
           {
             player_attributes: [:name]
           }

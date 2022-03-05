@@ -23,7 +23,10 @@ class MatchPlayer < ApplicationRecord
   belongs_to :match
   belongs_to :player
 
+  has_one :elo_change
+
   accepts_nested_attributes_for :player
+  accepts_nested_attributes_for :elo_change
 
   validates :player_id, uniqueness: { scope: :match_id }
 
@@ -32,6 +35,4 @@ class MatchPlayer < ApplicationRecord
     red: 1,
     blue: 2
   }
-
-  attr_accessor :elo_change
 end

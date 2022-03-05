@@ -10,14 +10,18 @@ RSpec.describe API::MatchesController, type: :request do
           match_players_attributes: [
             {
               team_id: "red",
-              elo_change: 25,
+              elo_change_attributes: {
+                value: 25
+              },
               player_attributes: {
                 name: "El Bicho"
               }
             },
             {
               team_id: "blue",
-              elo_change: 5,
+              elo_change_attributes: {
+                value: 5
+              },
               player_attributes: {
                 name: "Kerry"
               }
