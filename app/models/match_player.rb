@@ -23,7 +23,7 @@ class MatchPlayer < ApplicationRecord
   belongs_to :match
   belongs_to :player
 
-  has_one :elo_change
+  has_one :elo_change, dependent: :destroy
 
   accepts_nested_attributes_for :player
   accepts_nested_attributes_for :elo_change

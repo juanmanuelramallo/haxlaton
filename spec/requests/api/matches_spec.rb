@@ -62,6 +62,10 @@ RSpec.describe API::MatchesController, type: :request do
         have_attributes(name: "El Bicho", elo: 1525),
         have_attributes(name: "Kerry", elo: 1505)
       )
+      expect(EloChange.all).to contain_exactly(
+        have_attributes(value: 25, current_elo: 1525),
+        have_attributes(value: 5, current_elo: 1505)
+      )
     end
 
     context "when a player already exists" do
@@ -98,6 +102,11 @@ RSpec.describe API::MatchesController, type: :request do
         expect(Player.all).to contain_exactly(
           have_attributes(name: "El Bicho", elo: 1225),
           have_attributes(name: "Kerry", elo: 1505)
+        )
+
+        expect(EloChange.all).to contain_exactly(
+          have_attributes(value: 25, current_elo: 1225),
+          have_attributes(value: 5, current_elo: 1505)
         )
       end
     end

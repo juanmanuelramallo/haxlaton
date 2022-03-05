@@ -3,6 +3,7 @@
 # Table name: elo_changes
 #
 #  id              :bigint           not null, primary key
+#  current_elo     :integer
 #  value           :integer          not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
@@ -24,6 +25,7 @@ class EloChange < ApplicationRecord
   after_commit :update_player_elo, on: :create
 
   def update_player_elo
+    update(current_elo: player.elo + value)
     player.update(elo: player.elo + value)
   end
 end

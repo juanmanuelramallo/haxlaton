@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_03_05_175146) do
+ActiveRecord::Schema[7.0].define(version: 2022_03_05_182906) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -47,6 +47,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_05_175146) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "match_player_id"
+    t.integer "current_elo"
     t.index ["match_player_id"], name: "index_elo_changes_on_match_player_id"
   end
 
