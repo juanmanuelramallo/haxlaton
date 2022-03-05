@@ -1,0 +1,9 @@
+<span class="text-gray-500 text-xs">#<%= match_player.player.id %></span>
+<%= match_player.player.name %>
+
+<span class="rounded-full p-1 w-10 h-10 <%= match_player.elo_change&.value&.positive? ? "text-green-600" : "text-red-600" %>">
+  <% if match_player.elo_change&.value&.positive? %>
+    <span>+</span>
+  <% end %>
+  <%= match_player.elo_change&.value %>
+</span>

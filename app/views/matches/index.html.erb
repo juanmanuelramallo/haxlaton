@@ -2,17 +2,17 @@
 
 <% @matches.each do |match| %>
   <div class="flex flex-row">
-    <div class="mb-4 border-2 border-gray-100 rounded p-5 max-w-md flex-1">
+    <div class="mb-4 border-2 border-gray-100 rounded p-5 max-w-lg flex-1">
       <p class="mb-2 font-bold text-gray-600">
         <span class="text-gray-500 text-xs">#<%= match.id %></span>
         <%= l match.created_at %>
       </p>
 
-      <div class="grid grid-cols-3 mb-2">
+      <div class="flex flex-row justify-between mb-2">
         <div>
           <p class="font-bold text-red-600">Red</p>
 
-          <%= render "players", players: match.red_players %>
+          <%= render "match_players", match_players: match.red_match_players %>
         </div>
         <div class="flex flex-col justify-center text-center text-gray-600">
           vs.
@@ -20,7 +20,7 @@
         <div class="text-right">
           <p class="font-bold text-blue-500">Blue</p>
 
-          <%= render "players", players: match.blue_players %>
+          <%= render "match_players", match_players: match.blue_match_players %>
         </div>
       </div>
 

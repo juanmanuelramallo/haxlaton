@@ -1,0 +1,11 @@
+<% if match_players.blank? %>
+  <p class="text-gray-300">No players</p>
+<% else %>
+  <ul>
+    <% match_players.each do |match_player| %>
+      <li class="mb-2">
+        <%= render "match_player", match_player: match_player %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
