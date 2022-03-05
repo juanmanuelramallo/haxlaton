@@ -22,4 +22,10 @@
 class EloChange < ApplicationRecord
   belongs_to :match
   belongs_to :player
+
+  after_commit :update_player_elo, on: :create
+
+  def update_player_elo
+    player.update(elo: player.elo + value)
+  end
 end

@@ -51,8 +51,17 @@ RSpec.describe API::MatchesController, type: :request do
       )
     end
 
+    it "updates the players' elo" do
+      subject
+
+      expect(Player.all).to contain_exactly(
+        have_attributes(name: "El Bicho", elo: 1525),
+        have_attributes(name: "Kerry", elo: 1505)
+      )
+    end
+
     context "when a player already exists" do
-      let!(:player) { create(:player, name: "El Bicho") }
+      let!(:player) { create(:player, name: "El Bicho", elo: 1200) }
 
       it "does not create a new player object for El Bicho" do
         expect(Match.count).to eq(0)
@@ -76,6 +85,15 @@ RSpec.describe API::MatchesController, type: :request do
         expect(EloChange.all).to contain_exactly(
           have_attributes(value: 25),
           have_attributes(value: 5)
+        )
+      end
+
+      it "updates the players' elo" do
+        subject
+
+        expect(Player.all).to contain_exactly(
+          have_attributes(name: "El Bicho", elo: 1225),
+          have_attributes(name: "Kerry", elo: 1505)
         )
       end
     end
