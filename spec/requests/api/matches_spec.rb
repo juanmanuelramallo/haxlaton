@@ -68,6 +68,14 @@ RSpec.describe API::MatchesController, type: :request do
       )
     end
 
+    it "returns the match URL" do
+      subject
+
+      expect(response.parsed_body).to include(
+        "match_url" => match_url(Match.last)
+      )
+    end
+
     context "when a player already exists" do
       let!(:player) { create(:player, name: "El Bicho", elo: 1200) }
 

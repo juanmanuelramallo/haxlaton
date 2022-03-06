@@ -14,7 +14,7 @@ module API
       end
 
       if @match.save
-        render json: @match, status: :created
+        render json: @match.attributes.merge(match_url: match_url(@match)), status: :created
       else
         render json: @match.errors, status: :unprocessable_entity
       end
