@@ -1,0 +1,11 @@
+<% links = [
+  ["Partidos", matches_path],
+  ["Jugadores", players_path],
+] %>
+
+<ul class="mb-6 flex flex-row">
+  <% links.each do |name, path| %>
+    <% active = current_page?(path) || (current_page?(root_path) && path == matches_path) %>
+    <li><%= link_to name, path, class: "text-blue-500 hover:underline mr-3 #{active ? "text-blue-700 font-bold" : ""}" %></li>
+  <% end %>
+</ul>

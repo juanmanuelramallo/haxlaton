@@ -1,8 +1,6 @@
-<h1 class="text-xl font-bold mb-8">Players</h1>
-
-<table class="table-auto border">
+<table class="table-auto border border-separate rounded">
   <thead>
-    <% th_classes = "py-2 px-4 text-left border border-gray-200 bg-gray-100" %>
+    <% th_classes = "py-2 px-4 text-left bg-gray-100 rounded" %>
     <tr>
       <th class="<%= th_classes %>">ID</th>
       <th class="<%= th_classes %>">Name</th>
@@ -11,9 +9,9 @@
     </tr>
   </thead>
   <tbody>
-    <% td_classes = "py-2 px-4 border border-gray-200" %>
+    <% td_classes = "py-2 px-4" %>
     <% @players.each do |player| %>
-      <tr>
+      <tr class="<%= cycle("bg-white", "bg-gray-100") %>">
         <td class="<%= td_classes %>"><%= player.id %></td>
         <td class="<%= td_classes %>"><%= player.name %></td>
         <td class="<%= td_classes %>"><%= player.elo %></td>
