@@ -2,21 +2,11 @@ module API
   class MatchesController < ApplicationController
     # @route POST /api/matches (api_matches)
     def create
-      @match = Match.new(match_params)
-      @match.match_players.each do |match_player|
-        existing_player = Player.find_by(name: match_player.player.name)
-
-        next unless existing_player.present?
-
-        elo_change = match_player.elo_change
-        match_player.player = existing_player
-        match_player.elo_change = elo_change
-      end
-
-      if @match.save
-        render json: @match.attributes.merge(match_url: match_url(@match)), status: :created
+      match_data_form = MatchDataForm.new(match_params: match_params, scoreboard_log_params: scoreboard_log_params)
+      if match_data_form.save
+        render json: match_data_form.data, status: :created
       else
-        render json: @match.errors, status: :unprocessable_entity
+        render json: match_data_form.errors, status: :unprocessable_entity
       end
     end
 
@@ -36,6 +26,10 @@ module API
           }
         ]
       )
+    end
+
+    def scoreboard_log_params
+      params.require(:scoreboard_log).permit(:data)
     end
   end
 end

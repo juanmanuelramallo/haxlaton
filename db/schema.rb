@@ -64,7 +64,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_12_153644) do
   create_table "matches", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.json "scoreboard"
   end
 
   create_table "players", force: :cascade do |t|
@@ -74,9 +73,18 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_12_153644) do
     t.integer "elo", default: 1500, null: false
   end
 
+  create_table "scoreboard_logs", force: :cascade do |t|
+    t.jsonb "data", null: false
+    t.bigint "stored_from_match_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["stored_from_match_id"], name: "index_scoreboard_logs_on_stored_from_match_id"
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "elo_changes", "match_players"
   add_foreign_key "match_players", "matches"
   add_foreign_key "match_players", "players"
+  add_foreign_key "scoreboard_logs", "matches", column: "stored_from_match_id"
 end

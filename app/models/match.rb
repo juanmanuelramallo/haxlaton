@@ -3,7 +3,6 @@
 # Table name: matches
 #
 #  id         :bigint           not null, primary key
-#  scoreboard :json
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
@@ -13,6 +12,7 @@ class Match < ApplicationRecord
   has_many :blue_match_players, -> { where(team_id: 2) }, class_name: 'MatchPlayer'
   has_many :red_players, through: :red_match_players, source: :player
   has_many :blue_players, through: :blue_match_players, source: :player
+  has_one :scoreboard_log, foreign_key: :stored_from_match_id
 
   has_one_attached :recording, dependent: :destroy
 

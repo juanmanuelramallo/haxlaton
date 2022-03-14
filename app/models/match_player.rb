@@ -29,6 +29,7 @@ class MatchPlayer < ApplicationRecord
   accepts_nested_attributes_for :elo_change
 
   validates :player_id, uniqueness: { scope: :match_id }
+  validates :team_id, presence: true
 
   enum team_id: {
     spectator: 0,
