@@ -15,7 +15,6 @@ module API
     def match_params
       params.require(:match).permit(
         :recording,
-        :scoreboard,
         match_players_attributes: [
           :team_id,
           {
@@ -23,13 +22,12 @@ module API
           },
           {
             player_attributes: [:name]
+          },
+          {
+            player_stat_attributes: [:goals, :assits, :own_goals]
           }
         ]
       )
-    end
-
-    def scoreboard_log_params
-      params.require(:scoreboard_log).permit(:data)
     end
   end
 end

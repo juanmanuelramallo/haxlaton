@@ -4,7 +4,6 @@ class MatchResource < Madmin::Resource
   attribute :recording, index: false
   attribute :created_at, form: false
   attribute :updated_at, form: false
-  attribute :scoreboard, index: false, form: false
 
   # Associations
   attribute :match_players

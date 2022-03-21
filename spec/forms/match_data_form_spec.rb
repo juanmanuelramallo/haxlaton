@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe MatchDataForm do
-  let(:form) { described_class.new(match_params: match_params, scoreboard_log_params: scoreboard_log_params) }
+  let(:form) { described_class.new(match_params: match_params) }
   let(:match_params) {
     {
       match_players_attributes: [
@@ -12,7 +12,12 @@ RSpec.describe MatchDataForm do
           },
           player_attributes: {
             name: "El Bicho"
-          }
+          },
+          player_stat_attributes: {
+            goals: 1,
+            assists: 2,
+            own_goals: 3,
+          },
         },
         {
           team_id: "blue",
@@ -21,14 +26,14 @@ RSpec.describe MatchDataForm do
           },
           player_attributes: {
             name: "Kerry"
-          }
-        }
+          },
+          player_stat_attributes: {
+            goals: 4,
+            assists: 5,
+            own_goals: 6,
+          },
+        },
       ]
-    }
-  }
-  let(:scoreboard_log_params) {
-    {
-      data: '{"El Bicho": {"elo": 1505}}',
     }
   }
 
@@ -42,11 +47,20 @@ RSpec.describe MatchDataForm do
       expect(Match.last.match_players.count).to eq(2)
     end
 
-    it 'creates a scoreboard_log' do
-      expect { save }.to change { ScoreboardLog.count }.by(1)
+    it 'creates player stats' do
+      expect { save }.to change { PlayerStat.count }.by(2)
 
-      expect(ScoreboardLog.last.data).to eq('{"El Bicho": {"elo": 1505}}')
-      expect(ScoreboardLog.last.stored_from_match_id).to eq(Match.last.id)
+      bicho_player_stat = PlayerStat.first
+      expect(bicho_player_stat.match_player.player.name).to eq('El Bicho')
+      expect(bicho_player_stat.goals).to eq(1)
+      expect(bicho_player_stat.assists).to eq(2)
+      expect(bicho_player_stat.own_goals).to eq(3)
+
+      kerry_player_stat = PlayerStat.second
+      expect(kerry_player_stat.match_player.player.name).to eq('Kerry')
+      expect(kerry_player_stat.goals).to eq(4)
+      expect(kerry_player_stat.assists).to eq(5)
+      expect(kerry_player_stat.own_goals).to eq(6)
     end
 
     it 'creates elo changes' do
@@ -102,6 +116,22 @@ RSpec.describe MatchDataForm do
           have_attributes(value: 5, current_elo: 1505)
         )
       end
+
+      it 'creates player stats' do
+        expect { save }.to change { PlayerStat.count }.by(2)
+
+        bicho_player_stat = PlayerStat.first
+        expect(bicho_player_stat.match_player.player.name).to eq('El Bicho')
+        expect(bicho_player_stat.goals).to eq(1)
+        expect(bicho_player_stat.assists).to eq(2)
+        expect(bicho_player_stat.own_goals).to eq(3)
+
+        kerry_player_stat = PlayerStat.second
+        expect(kerry_player_stat.match_player.player.name).to eq('Kerry')
+        expect(kerry_player_stat.goals).to eq(4)
+        expect(kerry_player_stat.assists).to eq(5)
+        expect(kerry_player_stat.own_goals).to eq(6)
+      end
     end
 
     context 'when there is an error when saving the match' do
@@ -113,22 +143,8 @@ RSpec.describe MatchDataForm do
         expect { save }.not_to change { Match.count }
       end
 
-      it 'does not create a scoreboard_log' do
-        expect { save }.not_to change { ScoreboardLog.count }
-      end
-    end
-
-    context 'when there is an error when saving the scoreboard_log' do
-      before do
-        scoreboard_log_params[:data] = nil
-      end
-
-      it 'does not create a match' do
-        expect { save }.not_to change { Match.count }
-      end
-
-      it 'does not create a scoreboard_log' do
-        expect { save }.not_to change { ScoreboardLog.count }
+      it 'does not create a player_stat' do
+        expect { save }.not_to change { PlayerStat.count }
       end
     end
   end
@@ -164,12 +180,11 @@ RSpec.describe MatchDataForm do
     context 'when there are some errors after saving' do
       before do
         match_params[:match_players_attributes][0][:team_id] = nil
-        scoreboard_log_params[:data] = nil
 
         form.save
       end
 
-      it { expect(errors).to eq(["Match players team can't be blank", "Data can't be blank"]) }
+      it { expect(errors).to eq(["Match players team can't be blank"]) }
     end
   end
 end
