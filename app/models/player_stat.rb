@@ -3,9 +3,9 @@
 # Table name: player_stats
 #
 #  id              :bigint           not null, primary key
-#  assists         :integer
-#  goals           :integer
-#  own_goals       :integer
+#  assists         :integer          default(0), not null
+#  goals           :integer          default(0), not null
+#  own_goals       :integer          default(0), not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  match_player_id :bigint

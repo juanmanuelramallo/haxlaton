@@ -68,9 +68,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_21_175733) do
   end
 
   create_table "player_stats", force: :cascade do |t|
-    t.integer "goals"
-    t.integer "assists"
-    t.integer "own_goals"
+    t.integer "goals", default: 0, null: false
+    t.integer "assists", default: 0, null: false
+    t.integer "own_goals", default: 0, null: false
     t.bigint "match_player_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

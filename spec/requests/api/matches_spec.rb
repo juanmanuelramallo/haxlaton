@@ -2,11 +2,12 @@ require "rails_helper"
 
 RSpec.describe API::MatchesController, type: :request do
   describe "POST /api/matches" do
-    subject(:request) { post api_matches_path, params: params }
+    subject { post api_matches_path, params: params }
 
     let(:params) do
       {
         match: {
+          winner_team_id: 2,
           match_players_attributes: [
             {
               team_id: "red",
@@ -15,7 +16,12 @@ RSpec.describe API::MatchesController, type: :request do
               },
               player_attributes: {
                 name: "El Bicho"
-              }
+              },
+              player_stat_attributes: {
+                goals: 1,
+                assists: 2,
+                own_goals: 3,
+              },
             },
             {
               team_id: "blue",
@@ -24,50 +30,125 @@ RSpec.describe API::MatchesController, type: :request do
               },
               player_attributes: {
                 name: "Kerry"
-              }
-            }
-          ]
+              },
+              player_stat_attributes: {
+                goals: 4,
+                assists: 5,
+                own_goals: 6,
+              },
+            },
+          ],
         },
-        scoreboard_log: {
-          data: '{}'
-        }
       }
     end
 
-    let(:match_data_form) { instance_double(MatchDataForm, save: saved, data: nil, errors: nil) }
+    it "creates a match object" do
+      expect(Match.count).to eq(0)
+      expect(Player.count).to eq(0)
+      expect(PlayerStat.count).to eq(0)
 
-    before do
-      allow(MatchDataForm).to receive(:new).and_return(match_data_form)
+      subject
+
+      expect(response).to have_http_status(:created)
+      expect(Match.count).to eq(1)
+      expect(Match.last.match_players.count).to eq(2)
+      expect(Player.count).to eq(2)
     end
 
-    context 'when there are no errors' do
-      let(:saved) { true }
+    it "creates elo changes" do
+      expect(EloChange.count).to eq(0)
 
-      it 'uses the MatchDataForm' do
-        request
+      subject
 
-        expect(match_data_form).to have_received(:save)
-        expect(match_data_form).to have_received(:data)
-        expect(match_data_form).not_to have_received(:errors)
-      end
+      expect(EloChange.count).to eq(2)
+      expect(EloChange.all).to contain_exactly(
+        have_attributes(value: 25),
+        have_attributes(value: 5)
+      )
+    end
 
-      it 'creates a match object' do
-        request
+    it "creates player stats" do
+      expect(PlayerStat.count).to eq(0)
+
+      subject
+
+      expect(PlayerStat.all.map(&:attributes)).to contain_exactly(
+        a_hash_including(
+          'goals' => 1,
+          'assists' => 2,
+          'own_goals' => 3,
+        ),
+        a_hash_including(
+          'goals' => 4,
+          'assists' => 5,
+          'own_goals' => 6,
+        ),
+      )
+    end
+
+    it "updates the players' elo" do
+      subject
+
+      expect(Player.all).to contain_exactly(
+        have_attributes(name: "El Bicho", elo: 1525),
+        have_attributes(name: "Kerry", elo: 1505)
+      )
+      expect(EloChange.all).to contain_exactly(
+        have_attributes(value: 25, current_elo: 1525),
+        have_attributes(value: 5, current_elo: 1505)
+      )
+    end
+
+    it "returns the match URL" do
+      subject
+
+      expect(response.parsed_body).to include(
+        "match_url" => match_url(Match.last)
+      )
+    end
+
+    context "when a player already exists" do
+      let!(:player) { create(:player, name: "El Bicho", elo: 1200) }
+
+      it "does not create a new player object for El Bicho" do
+        expect(Match.count).to eq(0)
+        expect(Player.count).to eq(1)
+        expect(PlayerStat.count).to eq(0)
+
+        subject
 
         expect(response).to have_http_status(:created)
+        expect(Match.count).to eq(1)
+        expect(Match.last.match_players.count).to eq(2)
+        expect(Player.count).to eq(2)
+        expect(Player.where(name: "El Bicho").count).to eq(1)
+        expect(PlayerStat.count).to eq(2)
       end
-    end
 
-    context 'when there are errors' do
-      let(:saved) { false }
+      it "creates elo changes for both players" do
+        expect(EloChange.count).to eq(0)
 
-      it 'uses the MatchDataForm' do
-        request
+        subject
 
-        expect(match_data_form).to have_received(:save)
-        expect(match_data_form).not_to have_received(:data)
-        expect(match_data_form).to have_received(:errors)
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(EloChange.count).to eq(2)
+        expect(EloChange.all).to contain_exactly(
+          have_attributes(value: 25),
+          have_attributes(value: 5)
+        )
+      end
+
+      it "updates the players' elo" do
+        subject
+
+        expect(Player.all).to contain_exactly(
+          have_attributes(name: "El Bicho", elo: 1225),
+          have_attributes(name: "Kerry", elo: 1505)
+        )
+
+        expect(EloChange.all).to contain_exactly(
+          have_attributes(value: 25, current_elo: 1225),
+          have_attributes(value: 5, current_elo: 1505)
+        )
       end
     end
   end
