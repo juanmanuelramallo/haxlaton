@@ -2,7 +2,7 @@ module API
   class MatchesController < ApplicationController
     # @route POST /api/matches (api_matches)
     def create
-      match_data_form = MatchDataForm.new(match_params: match_params, scoreboard_log_params: scoreboard_log_params)
+      match_data_form = MatchDataForm.new(match_params: match_params)
       if match_data_form.save
         render json: match_data_form.data, status: :created
       else
