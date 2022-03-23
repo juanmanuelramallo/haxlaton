@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_03_05_182906) do
+ActiveRecord::Schema[7.0].define(version: 2022_03_21_175733) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -64,6 +64,17 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_05_182906) do
   create_table "matches", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "winner_team_id"
+  end
+
+  create_table "player_stats", force: :cascade do |t|
+    t.integer "goals", default: 0, null: false
+    t.integer "assists", default: 0, null: false
+    t.integer "own_goals", default: 0, null: false
+    t.bigint "match_player_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["match_player_id"], name: "index_player_stats_on_match_player_id"
   end
 
   create_table "players", force: :cascade do |t|
@@ -78,4 +89,5 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_05_182906) do
   add_foreign_key "elo_changes", "match_players"
   add_foreign_key "match_players", "matches"
   add_foreign_key "match_players", "players"
+  add_foreign_key "player_stats", "match_players"
 end

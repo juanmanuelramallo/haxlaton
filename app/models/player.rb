@@ -11,6 +11,7 @@
 class Player < ApplicationRecord
   has_many :match_players, dependent: :destroy
   has_many :matches, through: :match_players
+  has_many :player_stats, through: :match_players
 
   validates :name, presence: true
   validates :name, uniqueness: true

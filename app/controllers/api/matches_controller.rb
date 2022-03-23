@@ -25,6 +25,7 @@ module API
     def match_params
       params.require(:match).permit(
         :recording,
+        :winner_team_id,
         match_players_attributes: [
           :team_id,
           {
@@ -32,6 +33,9 @@ module API
           },
           {
             player_attributes: [:name]
+          },
+          {
+            player_stat_attributes: [:goals, :assists, :own_goals]
           }
         ]
       )

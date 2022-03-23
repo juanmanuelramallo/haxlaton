@@ -2,9 +2,10 @@
 #
 # Table name: matches
 #
-#  id         :bigint           not null, primary key
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id             :bigint           not null, primary key
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  winner_team_id :integer
 #
 class Match < ApplicationRecord
   has_many :match_players, dependent: :destroy

@@ -24,9 +24,11 @@ class MatchPlayer < ApplicationRecord
   belongs_to :player
 
   has_one :elo_change, dependent: :destroy
+  has_one :player_stat, dependent: :destroy
 
   accepts_nested_attributes_for :player
   accepts_nested_attributes_for :elo_change
+  accepts_nested_attributes_for :player_stat
 
   validates :player_id, uniqueness: { scope: :match_id }
 
