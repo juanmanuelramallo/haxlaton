@@ -3,6 +3,7 @@ namespace :madmin do
   resources :match_players
   resources :matches
   resources :players
+  resources :player_stats
   resources :elo_changes
   namespace :active_storage do
     resources :attachments
