@@ -1,6 +1,34 @@
 class PlayersController < ApplicationController
   def index
     @players = Player.all
+      .includes(match_players: [:match, :player_stat])
+      .where(match_players: { created_at: from_date..to_date })
+      .order("match_players.created_at": :desc)
+
+    @players_table = @players.map do |player|
+      total_games = player.match_players.size
+      total_wins = player.match_players.select { |mp| mp.match.winner_team_id == mp.team_id }.size
+      total_losses = total_games - total_wins
+      victory_rate = total_wins.to_f / total_games.to_f * 100
+      player_stats = player.match_players.map(&:player_stat)
+      total_goals = player_stats.map(&:goals).sum
+      total_assists = player_stats.map(&:assists).sum
+      total_own_goals = player_stats.map(&:own_goals).sum
+
+      {
+        "ID" => player.id,
+        "Name" => player.name,
+        "Last played at" =>  player.match_players.last&.created_at,
+        "Elo" =>  player.elo,
+        "Victory rate" =>  victory_rate,
+        "Total games" =>  total_games,
+        "Total wins" =>  total_wins,
+        "Total losses" =>  total_losses,
+        "Total goals" =>  total_goals,
+        "Total assists" =>  total_assists,
+        "Total own goals" =>  total_own_goals,
+      }
+    end
   end
 
   ###
