@@ -7,7 +7,7 @@ RSpec.describe API::MatchesController, type: :request do
     let(:params) do
       {
         match: {
-          winner_team_id: 2,
+          winner_team_id: "blue",
           match_players_attributes: [
             {
               team_id: "red",
