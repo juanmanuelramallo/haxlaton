@@ -1,14 +1,33 @@
 <div id="players-table"></div>
-
 <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
 <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
-
 <script>
   var table = new Tabulator("#players-table", {
-    layout: "fitDataTable",
+    layout: "fitDataStretch",
     pagination: "local",
     paginationSize: 10,
     data: JSON.parse('<%= raw @players.to_json %>'),
     autoColumns: true,
   });
 </script>
+
+
+<div class="bg-gray-100 p-3 mt-2 mb-2 rounded-md">
+  <%= form_tag players_path, method: :get do %>
+    <div class="flex flex-row gap-2">
+      <div class="flex flex-col">
+        <%= label_tag :from_date, "From", class: "text-xs" %>
+        <%= date_field_tag :from_date, from_date.to_s, class: "rounded-md border-gray-300"%>
+      </div>
+      <div class="flex flex-col">
+        <%= label_tag :to_date, "To", class: "text-xs" %>
+        <%= date_field_tag :to_date, to_date.to_s, class: "rounded-md border-gray-300" %>
+      </div>
+      <%= submit_tag "Apply", class: "text-blue-500 hover:underline hover:cursor-pointer" %>
+    </div>
+  <% end %>
+
+  <div class="bg-white mt-2 rounded-md">
+    <%= line_chart elos_by_date_players_path(from_date: from_date, to_date: to_date), points: false %>
+  </div>
+</div>
