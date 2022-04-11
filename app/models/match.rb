@@ -17,4 +17,6 @@ class Match < ApplicationRecord
   has_one_attached :recording, dependent: :destroy
 
   accepts_nested_attributes_for :match_players
+
+  enum winner_team_id: MatchPlayer.team_ids
 end

@@ -10,6 +10,7 @@
 #
 class Player < ApplicationRecord
   has_many :match_players, dependent: :destroy
+  has_many :elo_changes, through: :match_players
   has_many :matches, through: :match_players
   has_many :player_stats, through: :match_players
 

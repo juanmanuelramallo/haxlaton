@@ -5,6 +5,7 @@ ruby "3.0.3"
 
 gem "aws-sdk-s3", require: false
 gem "bootsnap", require: false
+gem "chartkick"
 gem "chusaku"
 gem "dotenv-rails"
 gem "madmin"
