@@ -1,22 +1,14 @@
-<table class="table-auto border border-separate rounded">
-  <thead>
-    <% th_classes = "py-2 px-4 text-left bg-gray-100 rounded" %>
-    <tr>
-      <th class="<%= th_classes %>">ID</th>
-      <th class="<%= th_classes %>">Name</th>
-      <th class="<%= th_classes %>">Elo</th>
-      <th class="<%= th_classes %>">Matches</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% td_classes = "py-2 px-4" %>
-    <% @players.each do |player| %>
-      <tr class="<%= cycle("bg-white", "bg-gray-100") %>">
-        <td class="<%= td_classes %>"><%= player.id %></td>
-        <td class="<%= td_classes %>"><%= player.name %></td>
-        <td class="<%= td_classes %>"><%= player.elo %></td>
-        <td class="<%= td_classes %>"><%= player.matches.count %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<div id="players-table"></div>
+
+<link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
+<script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
+
+<script>
+  var table = new Tabulator("#players-table", {
+    layout: "fitDataTable",
+    pagination: "local",
+    paginationSize: 10,
+    data: JSON.parse('<%= raw @players.to_json %>'),
+    autoColumns: true,
+  });
+</script>
