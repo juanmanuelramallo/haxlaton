@@ -55,17 +55,17 @@
     }
   });
 
-  var table = new Tabulator("#players-table", {
-      layout: "fitDataStretch",
-      pagination: "local",
-      paginationSize: 10,
-      data: JSON.parse('<%= raw @players_table.to_json %>'),
-      autoColumns: true,
-      autoColumnsDefinitions: [
-        {field: "Elo", formatter: "elo"}
-      ],
-      initialSort: [
-        {column: "Elo", dir: "desc"}
-      ],
-    });
+  new Tabulator("#players-table", {
+    layout: "fitDataStretch",
+    pagination: "local",
+    paginationSize: 10,
+    data: JSON.parse('<%= raw @players_table.to_json %>'),
+    autoColumns: true,
+    autoColumnsDefinitions: [
+      { field: "Elo", formatter: "elo" }
+    ],
+    initialSort: [
+      { column: "Elo", dir: "desc" }
+    ],
+  });
 </script>
