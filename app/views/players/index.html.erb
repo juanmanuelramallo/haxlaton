@@ -16,7 +16,18 @@
   <div id="players-table"></div>
 
   <div class="bg-white mt-2 rounded-md">
-    <%= line_chart elos_by_date_players_path(from_date: from_date, to_date: to_date), points: false %>
+    <%= line_chart elos_by_date_players_path(from_date: from_date, to_date: to_date),
+      points: false,
+      library: {
+        chart: {
+          zoomType: 'x'
+        },
+        yAxis: {
+          floor: 1100,
+          tickInterval: 100
+        },
+
+      }  %>
   </div>
 </div>
 

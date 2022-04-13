@@ -8,6 +8,7 @@
     "chart.js": "^3.7.1",
     "chartkick": "^4.1.1",
     "esbuild": "^0.14.23",
+    "highcharts": "^10.0.0",
     "postcss": "^8.4.7",
     "tailwindcss": "^3.0.23"
   },
