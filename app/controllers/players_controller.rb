@@ -9,7 +9,7 @@ class PlayersController < ApplicationController
       total_games = player.match_players.size
       total_wins = player.match_players.select { |mp| mp.match.winner_team_id == mp.team_id }.size
       total_losses = total_games - total_wins
-      victory_rate = total_wins.to_f / total_games.to_f * 100
+      victory_rate = (total_wins.to_f / total_games.to_f * 100).round(2)
       player_stats = player.match_players.map(&:player_stat).compact
       total_goals = player_stats.map(&:goals).sum
       total_assists = player_stats.map(&:assists).sum
