@@ -58,7 +58,7 @@
   var table = new Tabulator("#players-table", {
       layout: "fitDataStretch",
       pagination: "local",
-      paginationSize: 10,
+      paginationSize: 20,
       data: JSON.parse('<%= raw @players_table.to_json %>'),
       autoColumns: true,
       autoColumnsDefinitions: [
