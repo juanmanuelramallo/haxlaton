@@ -1,0 +1,12 @@
+<div class="<%= "text-right" if team == "blue" %>">
+  <p class="font-bold flex flex-row <%= team == "red" ? "text-red-600" : "text-blue-500 flex-row-reverse" %> mb-2">
+    <span class="px-1">
+      <%= team.titleize %>
+    </span>
+    <% if match.winner_team_id == team %>
+      <%= inline_svg_tag "icons/star.svg", class: "h-4 w-4 inline", title: "Winner" %>
+    <% end %>
+  </p>
+
+  <%= render "match_players", match_players: match.public_send("#{team}_match_players") %>
+</div>
