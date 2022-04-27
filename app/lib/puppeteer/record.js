@@ -28,18 +28,21 @@ if (pageUrl === undefined) {
   console.error('Please pass the URL to the replay. i.e. http://www.haxball.com/replay?v=3#https://...');
   process.exit(1);
 }
+console.log("pageUrl: " + pageUrl);
 
 const savePath = process.argv[3];
 if (savePath === undefined) {
   console.error('Please pass the save path. i.e. ./record.mp4');
   process.exit(1);
 }
+console.log("savePath: " + savePath);
 
 const durationInSeconds = process.argv[4];
 if (durationInSeconds === undefined) {
   console.error('Please pass the duration in seconds. i.e. 60');
   process.exit(1);
 }
+console.log("durationInSeconds: " + durationInSeconds);
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
