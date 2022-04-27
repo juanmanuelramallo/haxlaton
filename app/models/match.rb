@@ -17,6 +17,7 @@ class Match < ApplicationRecord
 
   has_one_attached :recording, dependent: :destroy
   has_one_attached :mp4_recording, dependent: :destroy
+  has_many_attached :clips, dependent: :dependent
 
   accepts_nested_attributes_for :match_players
 
