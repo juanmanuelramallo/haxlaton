@@ -15,3 +15,17 @@
 <% else %>
   <p class="text-xs text-gray-300">No elo change saved.</p>
 <% end %>
+
+<% if match_player.player_stat.present? %>
+  <div class="text-gray-500 text-xs">
+    <span title="Goals">
+      <%= match_player.player_stat.goals %> |
+    </span>
+    <span title="Assists">
+      <%= match_player.player_stat.assists %> |
+    </span>
+    <span title="Own goals">
+      <%= match_player.player_stat.own_goals %>
+    </span>
+  </div>
+<% end %>
