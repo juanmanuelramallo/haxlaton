@@ -7,6 +7,7 @@ RSpec.describe API::MatchesController, type: :request do
     let(:params) do
       {
         match: {
+          recording: fixture_file_upload("recording.hbr2", "blob", :binary),
           winner_team_id: "blue",
           match_players_attributes: [
             {
@@ -53,6 +54,9 @@ RSpec.describe API::MatchesController, type: :request do
       expect(Match.count).to eq(1)
       expect(Match.last.match_players.count).to eq(2)
       expect(Player.count).to eq(2)
+      expect(Match.last).to have_attributes(
+        duration_secs: 72
+      )
     end
 
     it "creates elo changes" do

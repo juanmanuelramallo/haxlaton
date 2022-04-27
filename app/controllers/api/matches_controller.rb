@@ -13,6 +13,12 @@ module API
         match_player.elo_change = elo_change
       end
 
+      # Reads the header of the HBR2 file to fetch the duration of the recording.
+      # https://github.com/haxball/haxball-issues/wiki/Linking-to-replay-files#hbr2-binary-header
+      duration_secs = (match_params[:recording].read.unpack("NNN").last / 60.0).round
+      @match.duration_secs = duration_secs
+      match_params[:recording].rewind
+
       if @match.save
         render json: @match.attributes.merge(match_url: match_url(@match)), status: :created
       else
