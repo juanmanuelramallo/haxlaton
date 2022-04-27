@@ -3,6 +3,7 @@
 # Table name: matches
 #
 #  id             :bigint           not null, primary key
+#  duration_secs  :integer
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #  winner_team_id :integer
