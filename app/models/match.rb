@@ -24,6 +24,6 @@ class Match < ApplicationRecord
   enum winner_team_id: MatchPlayer.team_ids
 
   def replay_uri
-    "https://haxball.com/replay?v=3##{Rails.application.routes.url_helpers.rails_blob_url(recording, disposition: :attachment, host: ENV.fetch("HOST_NAME"))}"
+    "https://haxball.com/replay?v=3##{Rails.application.routes.url_helpers.rails_blob_url(recording, disposition: :attachment, host: ENV.fetch("HOST_NAME"), protocol: ENV.fetch("HOST_PROTOCOL", "https"))}"
   end
 end
