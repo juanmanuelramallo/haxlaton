@@ -2,6 +2,8 @@ class MatchResource < Madmin::Resource
   # Attributes
   attribute :id, form: false
   attribute :recording, index: false
+  attribute :mp4_recording, index: false
+  attribute :clips, index: false
   attribute :created_at, form: false
   attribute :updated_at, form: false
 
