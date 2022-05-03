@@ -14,11 +14,12 @@ class PlayersController < ApplicationController
       total_goals = player_stats.map(&:goals).sum
       total_assists = player_stats.map(&:assists).sum
       total_own_goals = player_stats.map(&:own_goals).sum
+      played_secs = player.match_players.map(&:match).map(&:duration_secs).compact.sum
+      play_time = FormatSeconds.new(played_secs).format
 
       {
         "ID" => player.id,
         "Name" => player.name,
-        "Last played at" =>  player.match_players.last&.created_at,
         "Elo" =>  player.elo,
         "Victory rate" =>  victory_rate,
         "Total games" =>  total_games,
@@ -27,6 +28,8 @@ class PlayersController < ApplicationController
         "Total goals" =>  total_goals,
         "Total assists" =>  total_assists,
         "Total own goals" =>  total_own_goals,
+        "Play time" => play_time,
+        "Last played at" =>  player.match_players.last&.created_at,
       }
     end
   end
