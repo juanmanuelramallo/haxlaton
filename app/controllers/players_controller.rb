@@ -5,6 +5,10 @@ class PlayersController < ApplicationController
       .where(match_players: { created_at: from_date..to_date })
       .order("match_players.created_at": :desc)
 
+    if player_ids_to_filter.present?
+      @players = @players.where(id: player_ids_to_filter)
+    end
+
     @players_table = @players.map do |player|
       total_games = player.match_players.size
       total_wins = player.match_players.select { |mp| mp.match.winner_team_id == mp.team_id }.size
@@ -16,11 +20,13 @@ class PlayersController < ApplicationController
       total_own_goals = player_stats.map(&:own_goals).sum
       played_secs = player.match_players.map(&:match).map(&:duration_secs).compact.sum
       play_time = FormatSeconds.new(played_secs).format
+      elo_to_date = player.match_players.first&.elo_change&.current_elo
 
       {
         "ID" => player.id,
         "Name" => player.name,
         "Elo" =>  player.elo,
+        "Elo (#{to_date})" => elo_to_date,
         "Victory rate" =>  victory_rate,
         "Total games" =>  total_games,
         "Total wins" =>  total_wins,
@@ -29,7 +35,7 @@ class PlayersController < ApplicationController
         "Total assists" =>  total_assists,
         "Total own goals" =>  total_own_goals,
         "Play time" => play_time,
-        "Last played at" =>  player.match_players.last&.created_at,
+        "Last played at" =>  player.match_players.first&.created_at,
       }
     end
   end
@@ -41,7 +47,13 @@ class PlayersController < ApplicationController
   #
   ###
   def elos_by_date
-    players = Player.all.includes(:elo_changes).where(elo_changes: { created_at: from_date.beginning_of_day..to_date.end_of_day })
+    players = Player.all
+      .includes(:elo_changes)
+      .where(elo_changes: { created_at: from_date.beginning_of_day..to_date.end_of_day })
+
+    if player_ids_to_filter.present?
+      players = players.where(id: player_ids_to_filter)
+    end
 
     data = players.map do |player|
       # Fetch latest elo for a player on a given date
@@ -73,4 +85,8 @@ class PlayersController < ApplicationController
     @to_date ||= Date.parse(params[:to_date] || Date.today.to_s)
   end
   helper_method :to_date
+
+  def player_ids_to_filter
+    @player_ids_to_filter ||= params[:players]&.reject(&:blank?)
+  end
 end
