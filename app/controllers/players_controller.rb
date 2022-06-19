@@ -16,13 +16,13 @@ class PlayersController < ApplicationController
       total_own_goals = player_stats.map(&:own_goals).sum
       played_secs = player.match_players.map(&:match).map(&:duration_secs).compact.sum
       play_time = FormatSeconds.new(played_secs).format
-      elo_to_date = player.match_players.first.elo_changes.current_elo
+      elo_to_date = player.match_players.first&.elo_change&.current_elo
 
       {
         "ID" => player.id,
         "Name" => player.name,
         "Elo" =>  player.elo,
-        "Elo to date" => elo_to_date,
+        "Elo (#{to_date})" => elo_to_date,
         "Victory rate" =>  victory_rate,
         "Total games" =>  total_games,
         "Total wins" =>  total_wins,
