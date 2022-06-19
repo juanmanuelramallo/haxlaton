@@ -29,7 +29,7 @@ class PlayersController < ApplicationController
         "Total assists" =>  total_assists,
         "Total own goals" =>  total_own_goals,
         "Play time" => play_time,
-        "Last played at" =>  player.match_players.last&.created_at,
+        "Last played at" =>  player.match_players.first&.created_at,
       }
     end
   end
