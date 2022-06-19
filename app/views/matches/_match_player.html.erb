@@ -1,5 +1,5 @@
 <span class="text-gray-500 text-xs">#<%= match_player.player.id %></span>
-<%= match_player.player.name %>
+<%= render match_player.player %>
 
 <% if match_player.elo_change.present? %>
   <span class="text-gray-500 text-xs">
