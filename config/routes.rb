@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   end
 
   resources :matches, only: [:index, :destroy, :show]
-  resources :players, only: [:index] do
+  resources :players, only: [:index, :show] do
     get :elos_by_date, on: :collection
   end
 

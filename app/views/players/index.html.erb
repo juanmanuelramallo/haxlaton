@@ -77,7 +77,8 @@
       data: JSON.parse('<%= raw @players_table.to_json %>'),
       autoColumns: true,
       autoColumnsDefinitions: [
-        {field: "Elo", formatter: "elo"}
+          {field: "Elo", formatter: "elo"},
+          {field: "ID", title: "ID", formatter: "link", formatterParams: {urlPrefix: "/players/"}},
       ],
       initialSort: [
         {column: "Elo", dir: "desc"}
