@@ -1,23 +1,38 @@
 <div class="bg-gray-100 p-3 mt-2 mb-2 rounded-md">
   <%= form_tag players_path, method: :get, class: "my-2" do %>
-    <div class="flex flex-row gap-2">
+    <div class="grid md:grid-cols-6 gap-2">
       <div class="flex flex-col">
-        <%= label_tag :from_date, "From", class: "text-xs" %>
-        <%= date_field_tag :from_date, from_date.to_s, class: "rounded-md border-gray-300"%>
+        <%= label_tag :players, "Players", class: "text-xs" %>
+        <%= select_tag :players,
+          options_from_collection_for_select(Player.all, :id, :name, params[:players]),
+          include_blank: "Select all",
+          multiple: true,
+          class: "rounded-md border-gray-300 w-full h-full"
+        %>
       </div>
-      <div class="flex flex-col">
-        <%= label_tag :to_date, "To", class: "text-xs" %>
-        <%= date_field_tag :to_date, to_date.to_s, class: "rounded-md border-gray-300" %>
+      <div class="md:col-span-5">
+        <div class="flex flex-row gap-2">
+          <div class="flex flex-col">
+            <%= label_tag :from_date, "From", class: "text-xs" %>
+            <%= date_field_tag :from_date, from_date.to_s, class: "rounded-md border-gray-300"%>
+          </div>
+          <div class="flex flex-col">
+            <%= label_tag :to_date, "To", class: "text-xs" %>
+            <%= date_field_tag :to_date, to_date.to_s, class: "rounded-md border-gray-300" %>
+          </div>
+          <%= submit_tag "Apply", class: "text-blue-500 hover:underline hover:cursor-pointer" %>
+        </div>
+
+        <div id="players-table" class="mt-2 rounded-md border-gray-300"></div>
       </div>
-      <%= submit_tag "Apply", class: "text-blue-500 hover:underline hover:cursor-pointer" %>
     </div>
   <% end %>
 
-  <div id="players-table"></div>
 
   <div class="bg-white mt-2 rounded-md">
-    <%= line_chart elos_by_date_players_path(from_date: from_date, to_date: to_date),
+    <%= line_chart elos_by_date_players_path(from_date: from_date, to_date: to_date, players: params[:players]),
       points: false,
+      height: "90vh",
       library: {
         chart: {
           zoomType: 'x'
