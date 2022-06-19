@@ -17,6 +17,6 @@ module Madmin
     # before_action :authenticate_user!
 
     # Authenticate with Basic Auth
-    # http_basic_authenticate_with(name: Rails.application.credentials.admin_username, password: Rails.application.credentials.admin_password)
+    http_basic_authenticate_with(name: Rails.application.credentials.admin_username, password: Rails.application.credentials.admin_password)
   end
 end
