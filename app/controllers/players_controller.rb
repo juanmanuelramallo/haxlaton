@@ -40,6 +40,69 @@ class PlayersController < ApplicationController
     end
   end
 
+  def show
+    @player = Player.find(params[:id])
+
+    @match_players = @player.match_players
+      .where(created_at: from_date..to_date)
+      .order(created_at: :desc)
+    @won_match_players = @match_players.joins(<<~SQL)
+      JOIN matches
+        ON matches.id = match_players.match_id
+       AND matches.winner_team_id = match_players.team_id
+    SQL
+    @lost_match_players = @match_players.joins(<<~SQL)
+      JOIN matches
+        ON matches.id = match_players.match_id
+       AND matches.winner_team_id != match_players.team_id
+    SQL
+
+    win_count_by_teammate = @match_players.where(id: @won_match_players)
+      .joins(match: { match_players: :player })
+      .reorder("")
+      .group("players.id")
+      .count("matches.id")
+    loss_count_by_teammate = @match_players.where(id: @lost_match_players)
+      .joins(match: { match_players: :player })
+      .reorder("")
+      .group("players.id")
+      .count("matches.id")
+
+    # To test full count:
+    #   some_player.match_players
+    #     .joins(match: { match_players: :player })
+    #     .where(players: { id: [other_player.id] })
+    #     .where("matches.winner_team_id IS NOT NULL")
+    #     .count
+    #
+    # This count must match the sum of both wins and loses by teammate
+
+    @teammates = Player.where(id: win_count_by_teammate.keys + loss_count_by_teammate.keys)
+      .where.not(id: @player.id)
+      .to_h do |player|
+        win_count = win_count_by_teammate.fetch(player.id, 0)
+        loss_count = loss_count_by_teammate.fetch(player.id, 0)
+        total_count = win_count + loss_count
+        [
+          player,
+          {
+            win_count: win_count,
+            win_percent: (win_count / total_count.to_f * 100).round(2),
+            loss_count: loss_count,
+            loss_percent: (loss_count / total_count.to_f * 100).round(2),
+            total_count: total_count
+          }
+        ]
+      end
+
+    @most_winner = @teammates.max_by { |t,s| s[:win_count] }
+    @most_loser = @teammates.max_by { |t,s| s[:loss_count] }
+    @best_teammate = @teammates.max_by { |t,s| s[:win_percent] }
+    @worst_teammate = @teammates.max_by { |t,s| s[:loss_percent] }
+
+    @win_percent = (@won_match_players.count.to_f / @match_players.count.to_f * 100).round(2)
+  end
+
   ###
   #
   # Chart data endpoints

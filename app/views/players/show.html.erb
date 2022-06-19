@@ -1,0 +1,82 @@
+<div class="bg-gray-100 p-3 mt-2 mb-2 rounded-md">
+  <%= form_tag player_path(@player), method: :get, class: "my-2" do %>
+    <div class="flex flex-row gap-2">
+      <div class="flex flex-col">
+        <%= label_tag :from_date, "From", class: "text-xs" %>
+        <%= date_field_tag :from_date, from_date.to_s, class: "rounded-md border-gray-300"%>
+      </div>
+      <div class="flex flex-col">
+        <%= label_tag :to_date, "To", class: "text-xs" %>
+        <%= date_field_tag :to_date, to_date.to_s, class: "rounded-md border-gray-300" %>
+      </div>
+      <%= submit_tag "Apply", class: "text-blue-500 hover:underline hover:cursor-pointer" %>
+    </div>
+  <% end %>
+
+  <% if @teammates.any? %>
+    <div class="mt-2 grid md:grid-cols-4 gap-2">
+      <% card_class = "p-4 rounded-md bg-white" %>
+      <div class="<%= card_class %>">
+        <p><strong><%= render @player %></strong> jugó <strong><%= @match_players.count %></strong> partidos,</p>
+        <p>
+        de los cuales ganó <strong><%= @won_match_players.count %></strong>
+        <small class="text-xs">(<%= @win_percent %>%)</small>
+        </p>
+        <p>y perdió <strong><%= @lost_match_players.count %></strong>.</p>
+      </div>
+
+      <div class="<%= card_class %>">
+        <p>Ganó más jugando con <strong><%= render @most_winner[0] %></strong>,</p>
+        <p><strong><%= @most_winner[1][:win_count] %></strong> partidos par ser exactos.</p>
+        <p><%= @most_winner == @most_loser ? "Irónicamente perdió" : "Perdió" %> más jugando con <strong><%= render @most_loser[0] %></strong>,</p>
+        <p><strong><%= @most_loser[1][:loss_count] %></strong> veces para ser precisos.</p>
+      </div>
+
+      <div class="<%= card_class %>">
+        <p>El mejor compañero fue <strong><%= render @best_teammate[0] %></strong>.</p>
+        <p>
+        Juntos ganaron <strong><%= @best_teammate[1][:win_count] %></strong> partidos
+        <small class="text-xs">(<%= @best_teammate[1][:win_percent] %>%)</small>,
+        </p>
+        <p><%= @best_teammate[1][:win_count] > @best_teammate[1][:loss_count] ? "y solamente perdieron" : "pero bueno, también perdieron" %> <strong><%= @best_teammate[1][:loss_count] %></strong> partidos.</p>
+      </div>
+
+      <div class="<%= card_class %>">
+        <p>El peor compañerx fue <strong><%= render @worst_teammate[0] %></strong>.</p>
+        <p>
+        Juntas perdieron <strong><%= @worst_teammate[1][:loss_count] %></strong> partidos
+        <small class="text-xs">(<%= @worst_teammate[1][:loss_percent] %>%)</small>,
+        </p>
+        <p>y solamente ganaron <strong><%= @worst_teammate[1][:win_count] %></strong> partidos.</p>
+      </div>
+    </div>
+
+    <div class="flex flex-row gap-2 mt-2">
+      <%= pie_chart @teammates.to_h { |player, stats| [player.name, stats[:win_count]] },
+        title: "Cantidad de victorias por equipo" %>
+      <%= pie_chart @teammates.to_h { |player, stats| [player.name, stats[:loss_count]] },
+        title: "Cantidad de derrotas por equipo" %>
+      <%= pie_chart @teammates.to_h { |player, stats| [player.name, stats[:win_percent]] },
+        title: "Ratio de victorias" %>
+      <%= pie_chart @teammates.to_h { |player, stats| [player.name, stats[:loss_percent]] },
+        title: "Ratio de derrotas" %>
+    </div>
+    <div class="bg-white mt-2 rounded-md">
+      <%= line_chart elos_by_date_players_path(from_date: from_date, to_date: to_date, players: [@player.id]),
+        points: false,
+        height: "50vh",
+        library: {
+          chart: {
+            zoomType: 'x'
+          },
+          yAxis: {
+            floor: 1100,
+            tickInterval: 100
+          },
+
+        }  %>
+    </div>
+  <% else %>
+    <p>No hay datos para mostrar.</p>
+  <% end %>
+</div>
