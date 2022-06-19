@@ -14,7 +14,7 @@ class Player < ApplicationRecord
   has_many :elo_changes, through: :match_players
   has_many :matches, through: :match_players
   has_many :player_stats, through: :match_players
-  has_secure_password
+  has_secure_password validations: false
 
   validates :name, presence: true
   validates :name, uniqueness: true
