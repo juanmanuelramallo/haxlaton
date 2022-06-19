@@ -49,9 +49,10 @@
 
 <%# Tabulator.js for the players table %>
 <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
-<script id="tabulator-script" type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
+<script id="tabulator-script" type="text/javascript"></script>
 <script>
   var tabulatorScript = document.querySelector("#tabulator-script");
+  tabulatorScript.src = "https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js";
   tabulatorScript.addEventListener("load", function() {
       Tabulator.extendModule("format", "formatters", {
           elo: function(cell, formatterParams) {
