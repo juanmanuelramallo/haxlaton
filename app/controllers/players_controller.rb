@@ -45,7 +45,6 @@ class PlayersController < ApplicationController
 
     @match_players = @player.match_players
       .where(created_at: from_date..to_date)
-      .order(created_at: :desc)
     @won_match_players = @match_players.joins(<<~SQL)
       JOIN matches
         ON matches.id = match_players.match_id
@@ -57,16 +56,32 @@ class PlayersController < ApplicationController
        AND matches.winner_team_id != match_players.team_id
     SQL
 
-    win_count_by_teammate = @match_players.where(id: @won_match_players)
-      .joins(match: { match_players: :player })
-      .reorder("")
+    win_count_by_teammate = @match_players
+      .joins(<<~SQL)
+        INNER JOIN "matches" ON "matches"."id" = "match_players"."match_id"
+        INNER JOIN "match_players" "match_players_matches" ON "match_players_matches"."match_id" = "matches"."id"
+          AND "match_players_matches"."team_id" = "match_players"."team_id"
+          AND "match_players_matches"."team_id" = "matches"."winner_team_id"
+        INNER JOIN "players" ON "players"."id" = "match_players_matches"."player_id"
+      SQL
+      .where("match_players.player_id": @player.id)
+      .where.not("players.id": @player.id)
+      .select("players.id, match_players.id")
       .group("players.id")
-      .count("matches.id")
-    loss_count_by_teammate = @match_players.where(id: @lost_match_players)
-      .joins(match: { match_players: :player })
-      .reorder("")
+      .count("match_players.id")
+    loss_count_by_teammate = @match_players
+      .joins(<<~SQL)
+        INNER JOIN "matches" ON "matches"."id" = "match_players"."match_id"
+        INNER JOIN "match_players" "match_players_matches" ON "match_players_matches"."match_id" = "matches"."id"
+          AND "match_players_matches"."team_id" = "match_players"."team_id"
+          AND "match_players_matches"."team_id" != "matches"."winner_team_id"
+        INNER JOIN "players" ON "players"."id" = "match_players_matches"."player_id"
+      SQL
+      .where("match_players.player_id": @player.id)
+      .where.not("players.id": @player.id)
+      .select("players.id, match_players.id")
       .group("players.id")
-      .count("matches.id")
+      .count("match_players.id")
 
     # To test full count:
     #   some_player.match_players
