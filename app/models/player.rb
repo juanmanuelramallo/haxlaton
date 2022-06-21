@@ -19,5 +19,5 @@ class Player < ApplicationRecord
   validates :name, presence: true
   validates :name, uniqueness: true
   validates :elo, numericality: { greater_than_or_equal_to: 0 }
-  validates :password, format: { with: /\A[a-zA-Z0-9]+\z/, message: "solo letras y números" }
+  validates :password, format: { with: /\A[a-zA-Z0-9]+\z/, message: "solo letras y números", allow_blank: true }
 end
