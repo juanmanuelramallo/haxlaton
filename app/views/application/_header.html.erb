@@ -3,9 +3,33 @@
   ["Jugadores", players_path],
 ] %>
 
-<ul class="mb-6 flex flex-row">
-  <% links.each do |name, path| %>
-    <% active = current_page?(path) || (current_page?(root_path) && path == matches_path) %>
-    <li><%= link_to name, path, class: "text-blue-500 hover:underline mr-3 #{active ? "text-blue-700 font-bold" : ""}" %></li>
-  <% end %>
-</ul>
+<% if player_signed_in? %>
+  <% user_links = [
+    ["Logueado como #{current_player.name}", edit_player_path, nil],
+    ["Salir", session_path, { turbo_method: :delete }]
+  ] %>
+<% else %>
+  <% user_links = [
+    ["Login", new_session_path]
+  ] %>
+<% end %>
+
+<div class="flex flex-col md:flex-row justify-between mb-6 gap-4">
+  <ul class="flex flex-col md:flex-row gap-2 md:gap-4">
+    <% links.each do |name, path| %>
+      <% active = current_page?(path) || (current_page?(root_path) && path == matches_path) %>
+      <li><%= link_to name, path, class: "text-blue-500 hover:underline #{active ? "text-blue-700 font-bold" : ""}" %></li>
+    <% end %>
+  </ul>
+  <ul class="flex flex-col md:flex-row gap-2 md:gap-4">
+    <% user_links.each do |name, path, data| %>
+      <li>
+        <% if path %>
+          <%= link_to name, path, class: "text-blue-500 hover:underline", data: data %>
+        <% else %>
+          <%= name %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</div>

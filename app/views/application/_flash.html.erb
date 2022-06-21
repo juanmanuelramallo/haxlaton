@@ -1,0 +1,7 @@
+<div class="container mx-auto max-w-md my-2">
+  <% flash.each do |key, msg| %>
+    <% html_class = ["alert", "error"].include?(key) ? "border-red-500" : "border-blue-500" %>
+
+    <div class="border-b-2 py-2 px-4 <%= html_class %>"><%= msg %></div>
+  <% end %>
+</div>

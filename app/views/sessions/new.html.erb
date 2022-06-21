@@ -1,0 +1,8 @@
+<div class="container mx-auto max-w-md bg-gray-50 rounded-md p-5">
+  <h1 class="font-bold mb-2">Oke oke</h1>
+  <%= simple_form_for :session, url: session_path do |f| %>
+    <%= f.input :name %>
+    <%= f.input :password %>
+    <%= f.button :submit, "Login" %>
+  <% end %>
+</div>

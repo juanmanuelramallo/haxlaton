@@ -51,7 +51,7 @@
       </div>
     </div>
 
-    <div class="flex flex-row gap-2 mt-2">
+    <div class="mt-2 grid md:grid-cols-4 gap-2">
       <%= pie_chart @teammates.to_h { |player, stats| [player.name, stats[:win_count]] },
         title: "Cantidad de victorias por equipo" %>
       <%= pie_chart @teammates.to_h { |player, stats| [player.name, stats[:loss_count]] },
