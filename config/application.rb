@@ -36,5 +36,6 @@ module Haxlaton
     config.generators.system_tests = nil
 
     config.hosts << ENV.fetch("HOST_NAME")
+    config.time_zone = "Buenos Aires"
   end
 end

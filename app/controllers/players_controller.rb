@@ -1,4 +1,6 @@
 class PlayersController < ApplicationController
+  before_action :authenticate_player!, only: [:edit, :update]
+
   def index
     @players = Player.all
       .includes(match_players: [:match, :player_stat])
@@ -118,6 +120,21 @@ class PlayersController < ApplicationController
     @win_percent = (@won_match_players.count.to_f / @match_players.count.to_f * 100).round(2)
   end
 
+  def edit
+    @player = current_player
+  end
+
+  def update
+    @player = current_player
+
+    if @player.update(update_params)
+      redirect_to edit_player_path, notice: "Todo óptimo"
+    else
+      flash.now.alert = "nope"
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
   ###
   #
   # Chart data endpoints
@@ -166,5 +183,11 @@ class PlayersController < ApplicationController
 
   def player_ids_to_filter
     @player_ids_to_filter ||= params[:players]&.reject(&:blank?)
+  end
+
+  private
+
+  def update_params
+    params.require(:player).permit(:password)
   end
 end

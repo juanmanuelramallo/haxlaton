@@ -1,0 +1,13 @@
+<div class="container mx-auto max-w-md bg-gray-50 rounded-md p-5">
+  <h1 class="font-bold mb-2">
+    <small class="text-gray-500">#<%= current_player.id %></small>
+    <%= render current_player %>
+  </h1>
+  <p class="mb-2">Actualizado por última vez el <%= l current_player.updated_at, format: :short %></p>
+
+  <%= simple_form_for @player, url: "/player", method: :put do |f| %>
+    <%= f.input :password, placeholder: "new password here" %>
+
+    <%= f.button :submit, "Oke oke, save" %>
+  <% end %>
+</div>
