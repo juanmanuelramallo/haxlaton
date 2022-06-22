@@ -13,7 +13,7 @@
     </div>
   <% end %>
 
-  <div class="grid md:grid-cols-6 lg:grid-cols-8 gap-2">
+  <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2 ">
     <% card_class = "p-2 rounded-md bg-white" %>
     <% label_class = "text-xs text-gray-400 truncate" %>
     <% stat_class = "text-center font-bold text-2xl py-4 lg:py-8" %>
@@ -99,10 +99,16 @@
             tickInterval: 100
           },
 
-        }  %>
+        } %>
+
+      <%= column_chart([
+        {name: "Goles", data: @goals_by_day},
+        {name: "Asistencias", data: @assists_by_day},
+        {name: "Autogoles", data: @own_goals_by_day},
+      ]) %>
     </div>
   <% else %>
-    <p>No hay datos para mostrar.</p>
+    <p class="mt-2">No hay datos para mostrar.</p>
   <% end %>
 </div>
 
