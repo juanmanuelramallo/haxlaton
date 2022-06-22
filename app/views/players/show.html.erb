@@ -13,6 +13,30 @@
     </div>
   <% end %>
 
+  <div class="grid md:grid-cols-6 lg:grid-cols-8 gap-2">
+    <% card_class = "p-2 rounded-md bg-white" %>
+    <% label_class = "text-xs text-gray-400 truncate" %>
+    <% stat_class = "text-center font-bold text-2xl py-4 lg:py-8" %>
+
+    <% stats = [
+      ["Tiempo jugado", @played_time],
+      ["Partidos jugados", @played_matches],
+      ["Goles marcados", @goals],
+      ["Asistencias", @assists],
+      ["Autogoles xD", @own_goals],
+      ["Goles por partido", @goals_per_match],
+      ["Asistencias por partido", @assists_per_match],
+      ["Autogoles por partido", @own_goals_per_match],
+      ] %>
+
+    <% stats.each do |label, value| %>
+      <div class="<%= card_class %>">
+        <p class="<%= label_class %>" title="<%= label %>"><%= label %></p>
+        <p class="<%= stat_class %>"><%= value %></p>
+      </div>
+    <% end %>
+  </div>
+
   <% if @teammates.any? %>
     <div class="mt-2 grid md:grid-cols-4 gap-2">
       <% card_class = "p-4 rounded-md bg-white" %>
@@ -63,6 +87,7 @@
     </div>
     <div class="bg-white mt-2 rounded-md">
       <%= line_chart elos_by_date_players_path(from_date: from_date, to_date: to_date, players: [@player.id]),
+        title: "ELO por fecha",
         points: false,
         height: "50vh",
         library: {
