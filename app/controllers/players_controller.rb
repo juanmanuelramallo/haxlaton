@@ -47,6 +47,7 @@ class PlayersController < ApplicationController
 
     @match_players = @player.match_players
       .where(created_at: from_date..to_date)
+    @player_stats = @match_players.includes(:player_stat).map(&:player_stat).compact
     @won_match_players = @match_players.joins(<<~SQL)
       JOIN matches
         ON matches.id = match_players.match_id
@@ -85,15 +86,6 @@ class PlayersController < ApplicationController
       .group("players.id")
       .count("match_players.id")
 
-    # To test full count:
-    #   some_player.match_players
-    #     .joins(match: { match_players: :player })
-    #     .where(players: { id: [other_player.id] })
-    #     .where("matches.winner_team_id IS NOT NULL")
-    #     .count
-    #
-    # This count must match the sum of both wins and loses by teammate
-
     @teammates = Player.where(id: win_count_by_teammate.keys + loss_count_by_teammate.keys)
       .where.not(id: @player.id)
       .to_h do |player|
@@ -118,6 +110,19 @@ class PlayersController < ApplicationController
     @worst_teammate = @teammates.max_by { |t,s| s[:loss_percent] }
 
     @win_percent = (@won_match_players.count.to_f / @match_players.count.to_f * 100).round(2)
+    @played_time = FormatSeconds.new(@match_players.map(&:match).map(&:duration_secs).sum).format
+    @played_matches = @match_players.count
+    @goals = @match_players.map(&:player_stat).compact.map(&:goals).sum
+    @assists = @match_players.map(&:player_stat).compact.map(&:assists).sum
+    @own_goals = @match_players.map(&:player_stat).compact.map(&:own_goals).sum
+    @goals_per_match = (@goals.to_f / @played_matches.to_f).round(2)
+    @assists_per_match = (@assists.to_f / @played_matches.to_f).round(2)
+    @own_goals_per_match = (@own_goals.to_f / @played_matches.to_f).round(2)
+
+    @player_stats_by_day = @player_stats.group_by_day(&:created_at)
+    @goals_by_day = @player_stats_by_day.to_h { |day, stats| [l(day, format: :short), stats.map(&:goals).sum] }
+    @assists_by_day = @player_stats_by_day.to_h { |day, stats| [l(day, format: :short), stats.map(&:assists).sum] }
+    @own_goals_by_day = @player_stats_by_day.to_h { |day, stats| [l(day, format: :short), stats.map(&:own_goals).sum] }
   end
 
   def edit
