@@ -4,7 +4,7 @@ class PlayersController < ApplicationController
   def index
     @players = Player.all
       .includes(match_players: [:match, :player_stat])
-      .where(match_players: { created_at: from_date..to_date })
+      .where(match_players: { created_at: date_range })
       .order("match_players.created_at": :desc)
 
     if player_ids_to_filter.present?
@@ -46,7 +46,7 @@ class PlayersController < ApplicationController
     @player = Player.find(params[:id])
 
     @match_players = @player.match_players
-      .where(created_at: from_date..to_date)
+      .where(created_at: date_range)
     @player_stats = @match_players.includes(:player_stat).map(&:player_stat).compact
     @won_match_players = @match_players.joins(<<~SQL)
       JOIN matches
@@ -144,7 +144,7 @@ class PlayersController < ApplicationController
   def elos_by_date
     players = Player.all
       .includes(:elo_changes)
-      .where(elo_changes: { created_at: from_date.beginning_of_day..to_date.end_of_day })
+      .where(elo_changes: { created_at: date_range })
 
     if player_ids_to_filter.present?
       players = players.where(id: player_ids_to_filter)
@@ -180,6 +180,10 @@ class PlayersController < ApplicationController
     @to_date ||= Date.parse(params[:to_date] || Date.today.to_s)
   end
   helper_method :to_date
+
+  def date_range
+    (from_date.beginning_of_day)..(to_date.end_of_day)
+  end
 
   def player_ids_to_filter
     @player_ids_to_filter ||= params[:players]&.reject(&:blank?)
