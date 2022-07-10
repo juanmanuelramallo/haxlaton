@@ -19,6 +19,7 @@
     <% stat_class = "text-center font-bold text-2xl py-4 lg:py-8" %>
 
     <% stats = [
+      ["Gugador", @player.name],
       ["Tiempo jugado", @played_time],
       ["Partidos jugados", @played_matches],
       ["Goles marcados", @goals],
@@ -27,6 +28,9 @@
       ["Goles por partido", @goals_per_match],
       ["Asistencias por partido", @assists_per_match],
       ["Autogoles por partido", @own_goals_per_match],
+      ["Elo actual", @player.elo],
+      ["All time high Elo", @ath_elo],
+      ["All time low Elo", @atl_elo]
       ] %>
 
     <% stats.each do |label, value| %>
@@ -86,17 +90,18 @@
         title: "Ratio de derrotas" %>
     </div>
     <div class="bg-white mt-2 rounded-md">
-      <%= line_chart elos_by_date_players_path(from_date: from_date, to_date: to_date, players: [@player.id]),
+      <%= line_chart elos_by_date_players_path(from_date: from_date, to_date: to_date, players: [@player.id], all_time_values: true),
         title: "ELO por fecha",
         points: false,
         height: "50vh",
+        colors: ["#f45b5b", "#f45b5b", "#7cb5ec"],
         library: {
           chart: {
             zoomType: 'x'
           },
           yAxis: {
-            floor: 1100,
-            tickInterval: 100
+            floor: @atl_elo - 20,
+            tickInterval: 20
           },
 
         } %>

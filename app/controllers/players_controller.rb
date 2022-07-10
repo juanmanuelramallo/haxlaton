@@ -23,12 +23,17 @@ class PlayersController < ApplicationController
       played_secs = player.match_players.map(&:match).map(&:duration_secs).compact.sum
       play_time = FormatSeconds.new(played_secs).format
       elo_to_date = player.match_players.first&.elo_change&.current_elo
+      all_elos = player.match_players.map(&:elo_change).map(&:current_elo)
+      ath_elo = all_elos.max
+      atl_elo = all_elos.min
 
       {
         "ID" => player.id,
         "Name" => player.name,
         "Elo" =>  player.elo,
-        "Elo (#{to_date})" => elo_to_date,
+        "Elo at #{to_date}" => to_date.today? ? nil : elo_to_date,
+        "ATH Elo" => ath_elo,
+        "ATL Elo" => atl_elo,
         "Victory rate" =>  victory_rate,
         "Total games" =>  total_games,
         "Total wins" =>  total_wins,
@@ -38,7 +43,7 @@ class PlayersController < ApplicationController
         "Total own goals" =>  total_own_goals,
         "Play time" => play_time,
         "Last played at" =>  player.match_players.first&.created_at,
-      }
+      }.compact
     end
   end
 
@@ -48,6 +53,7 @@ class PlayersController < ApplicationController
     @match_players = @player.match_players
       .where(created_at: date_range)
     @player_stats = @match_players.includes(:player_stat).map(&:player_stat).compact
+    @elo_changes = @match_players.includes(:elo_change).map(&:elo_change).compact
     @won_match_players = @match_players.joins(<<~SQL)
       JOIN matches
         ON matches.id = match_players.match_id
@@ -118,6 +124,9 @@ class PlayersController < ApplicationController
     @goals_per_match = (@goals.to_f / @played_matches.to_f).round(2)
     @assists_per_match = (@assists.to_f / @played_matches.to_f).round(2)
     @own_goals_per_match = (@own_goals.to_f / @played_matches.to_f).round(2)
+    all_elos = @elo_changes.map(&:current_elo)
+    @ath_elo = all_elos.max
+    @atl_elo = all_elos.min
   end
 
   def edit
@@ -150,7 +159,7 @@ class PlayersController < ApplicationController
       players = players.where(id: player_ids_to_filter)
     end
 
-    data = players.map do |player|
+    data = players.flat_map do |player|
       # Fetch latest elo for a player on a given date
       last_elos_by_date = player.elo_changes.group_by { |ec| ec.created_at.to_date }.map do |date, elos|
         [date, elos.sort_by(&:created_at).last.current_elo]
@@ -162,11 +171,31 @@ class PlayersController < ApplicationController
         last_elos_by_date[date] ||= last_elos_by_date[date - 1.day]
       end
 
-      {
+      result = []
+
+      if params[:all_time_values].present?
+        all_elos = player.elo_changes.map(&:current_elo)
+        ath_elo = all_elos.max
+        atl_elo = all_elos.min
+        ath_elo_line = (from_date..to_date).to_h { |date| [date, ath_elo] }
+        atl_elo_line = (from_date..to_date).to_h { |date| [date, atl_elo] }
+
+        result << {
+          name: "ATH Elo #{player.name}",
+          data: ath_elo_line
+        }
+        result << {
+          name: "ATL Elo #{player.name}",
+          data: atl_elo_line
+        }
+      end
+
+      result << {
         name: player.name,
         data: last_elos_by_date
       }
-    end
+      result
+   end
 
     render json: data
   end
