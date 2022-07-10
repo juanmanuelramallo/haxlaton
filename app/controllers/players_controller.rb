@@ -118,11 +118,6 @@ class PlayersController < ApplicationController
     @goals_per_match = (@goals.to_f / @played_matches.to_f).round(2)
     @assists_per_match = (@assists.to_f / @played_matches.to_f).round(2)
     @own_goals_per_match = (@own_goals.to_f / @played_matches.to_f).round(2)
-
-    @player_stats_by_day = @player_stats.group_by_day(&:created_at)
-    @goals_by_day = @player_stats_by_day.to_h { |day, stats| [l(day, format: :short), stats.map(&:goals).sum] }
-    @assists_by_day = @player_stats_by_day.to_h { |day, stats| [l(day, format: :short), stats.map(&:assists).sum] }
-    @own_goals_by_day = @player_stats_by_day.to_h { |day, stats| [l(day, format: :short), stats.map(&:own_goals).sum] }
   end
 
   def edit

@@ -100,12 +100,6 @@
           },
 
         } %>
-
-      <%= column_chart([
-        {name: "Goles", data: @goals_by_day},
-        {name: "Asistencias", data: @assists_by_day},
-        {name: "Autogoles", data: @own_goals_by_day},
-      ]) %>
     </div>
   <% else %>
     <p class="mt-2">No hay datos para mostrar.</p>
