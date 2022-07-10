@@ -127,6 +127,18 @@ class PlayersController < ApplicationController
     all_elos = @elo_changes.map(&:current_elo)
     @ath_elo = all_elos.max
     @atl_elo = all_elos.min
+    mps = @match_players.includes(:match).order("match_players.created_at": :desc)
+    @winning_streak = 0
+    @lose_streak = 0
+    mps.each do |mp|
+      if @lose_streak == 0 && mp.match.winner_team_id == mp.team_id
+        @winning_streak += 1
+      elsif mp.match.winner_team_id != mp.team_id
+        @lose_streak += 1
+      else
+        break
+      end
+    end
   end
 
   def edit

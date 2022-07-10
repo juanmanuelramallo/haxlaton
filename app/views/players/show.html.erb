@@ -30,7 +30,9 @@
       ["Autogoles por partido", @own_goals_per_match],
       ["Elo actual", @player.elo],
       ["All time high Elo", @ath_elo],
-      ["All time low Elo", @atl_elo]
+      ["All time low Elo", @atl_elo],
+      ["Racha de victorias", @winning_streak],
+      ["Racha de derrotas", @lose_streak]
       ] %>
 
     <% stats.each do |label, value| %>
