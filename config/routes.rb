@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
   draw :madmin
+  constraints(-> (req) { req.session[:player_id].present? }) do
+    mount Blazer::Engine, at: "blazer"
+  end
 
   namespace :api do
     resources :matches, only: [:create]

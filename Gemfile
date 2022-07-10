@@ -5,6 +5,7 @@ ruby "3.0.3"
 
 gem "aws-sdk-s3", require: false
 gem "bcrypt"
+gem "blazer"
 gem "bootsnap", require: false
 gem "chartkick"
 gem "chusaku"
