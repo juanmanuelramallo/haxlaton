@@ -3,7 +3,7 @@ class PlayersController < ApplicationController
 
   def index
     @players = Player.all
-      .includes(match_players: [:match, :player_stat])
+      .includes(match_players: [:match, :player_stat, :elo_change])
       .where(match_players: { created_at: date_range })
       .order("match_players.created_at": :desc)
 
