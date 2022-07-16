@@ -23,6 +23,7 @@ data_sources:
 
     smart_variables:
       player_id: "SELECT id, name FROM players ORDER BY name ASC"
+      other_player_id: "SELECT id, name FROM players ORDER BY name ASC"
       team_id: {0: "Spectator", 1: "Red", 2: "Blue"}
       # zone_id: "SELECT id, name FROM zones ORDER BY name ASC"
       # period: ["day", "week", "month"]
@@ -31,10 +32,12 @@ data_sources:
     linked_columns:
       match_id: "/matches/{value}"
       player_id: "/players/{value}"
+      other_player_id: "/players/{value}"
       # user_id: "/admin/users/{value}"
 
     smart_columns:
       player_id: "SELECT id, name FROM players WHERE id IN {value}"
+      other_player_id: "SELECT id, name FROM players WHERE id IN {value}"
       team_id: {0: "Spectator", 1: "Red", 2: "Blue"}
       winner_team_id: {0: "Spectator", 1: "Red", 2: "Blue"}
       # user_id: "SELECT id, name FROM users WHERE id IN {value}"
