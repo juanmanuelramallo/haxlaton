@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     get :elos_by_date, on: :collection
   end
   resource :player, only: [:edit, :update]
+  resource :server
 
   root to: "matches#index"
 end

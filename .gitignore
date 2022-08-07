@@ -39,3 +39,6 @@ yarn-error.log
 
 # IDE
 .idea
+
+/lib/haxball_client/dist
+/lib/haxball_client/node_modules

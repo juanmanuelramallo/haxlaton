@@ -1,0 +1,22 @@
+{
+  "name": "nietobot",
+  "version": "1.0.0",
+  "description": "",
+  "source": "src/app.js",
+  "main": "dist/app.js",
+  "scripts": {
+    "test": "jest",
+    "build": "node build.js"
+  },
+  "author": "esviernes.com",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.17.5",
+    "@babel/preset-env": "^7.16.11",
+    "babel-jest": "^27.5.1",
+    "jest": "^27.5.1"
+  },
+  "dependencies": {
+    "esbuild": "^0.14.23"
+  }
+}
