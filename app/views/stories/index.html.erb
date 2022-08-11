@@ -1,0 +1,5 @@
+<div class="flex flex-col">
+  <% @template_names.each do |template_name| %>
+    <%= link_to template_name, story_path(template_name), class: "text-blue-500 hover:underline" %>
+  <% end %>
+</div>

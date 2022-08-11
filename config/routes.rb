@@ -19,5 +19,7 @@ Rails.application.routes.draw do
   resource :player, only: [:edit, :update]
   resource :server
 
+  resources :stories, only: [:index, :show], path: "historias"
+
   root to: "matches#index"
 end
