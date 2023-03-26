@@ -5,7 +5,9 @@ Rails.application.routes.draw do
   end
 
   namespace :api do
-    resources :matches, only: [:create]
+    resources :matches, only: [:create] do
+      resources :messages, only: [:create]
+    end
     resources :players, only: [:index] do
       post :auth, on: :collection
     end
