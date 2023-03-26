@@ -2,14 +2,15 @@ module API
   class MessagesController < ApplicationController
     def create
       match = Match.find(params[:match_id])
-      player_ids = match.players.pluck(:id)
-      match_players_by_player = match.match_players.index_by(&:player_id)
+      match_players_by_player = match.match_players.includes(:player).to_h do |match_player|
+        [match_player.player.name, match_player]
+      end
 
       messages = messages_params.map do |message|
-        next unless player_ids.include?(message[:player_id].to_i)
+        next unless match_players_by_player.keys.include?(message[:player_name])
 
         {
-          match_player_id: match_players_by_player[message[:player_id].to_i].id,
+          match_player_id: match_players_by_player[message[:player_name]].id,
           body: message[:body],
           sent_at: Time.at(message[:epoch_ms].to_i / 1000)
         }
@@ -26,7 +27,7 @@ module API
     private
 
     def messages_params
-      params.permit(messages: [:player_id, :body, :epoch_ms]).require(:messages)
+      params.permit(messages: [:player_name, :body, :epoch_ms]).require(:messages)
     end
   end
 end

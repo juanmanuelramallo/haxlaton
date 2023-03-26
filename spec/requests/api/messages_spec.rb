@@ -8,12 +8,12 @@ RSpec.describe API::MessagesController, type: :request do
     let(:messages) do
       [
         {
-          player_id: match_player.player_id,
+          player_name: match_player.player.name,
           body: "Disculpa nostra, no te queria insultar",
           epoch_ms: 1_600_000_000_000
         },
         {
-          player_id: other_match_player.player_id,
+          player_name: other_match_player.player.name,
           body: "oke oke",
           epoch_ms: 1_600_000_500_000
         }
