@@ -1,5 +1,9 @@
 # Haxlaton
-A server where the results of www.haxball.com matches will be stored. In Haxball you should configure a bot that will communicate with this server (check https://github.com/juanmanuelramallo/q for further references about the bot code)
+
+[![CI](https://github.com/juanmanuelramallo/haxlaton/actions/workflows/ci.yml/badge.svg)](https://github.com/juanmanuelramallo/haxlaton/actions/workflows/ci.yml)
+[![Haxball client](https://github.com/juanmanuelramallo/haxlaton/actions/workflows/haxball_client.yml/badge.svg)](https://github.com/juanmanuelramallo/haxlaton/actions/workflows/haxball_client.yml)
+
+A server where the results of www.haxball.com matches will be stored. In Haxball you should configure a bot that will communicate with this server (check https://github.com/juanmanuelramallo/haxlaton/tree/master/lib/haxball_client for further references about the bot code)
 
 ## Setup
 
