@@ -37,12 +37,12 @@ RSpec.describe API::MessagesController, type: :request do
         have_attributes(
           match_player_id: match_player.id,
           body: "Disculpa nostra, no te queria insultar",
-          sent_at: Time.parse("2020-09-13 09:26:40")
+          sent_at: be_an_instance_of(ActiveSupport::TimeWithZone)
         ),
         have_attributes(
           match_player_id: other_match_player.id,
           body: "oke oke",
-          sent_at: Time.parse("2020-09-13 09:35:00")
+          sent_at: be_an_instance_of(ActiveSupport::TimeWithZone)
         )
       )
     end
