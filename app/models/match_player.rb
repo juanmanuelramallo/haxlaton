@@ -25,6 +25,7 @@ class MatchPlayer < ApplicationRecord
 
   has_one :elo_change, dependent: :destroy
   has_one :player_stat, dependent: :destroy
+  has_many :messages, dependent: :destroy
 
   accepts_nested_attributes_for :player
   accepts_nested_attributes_for :elo_change
