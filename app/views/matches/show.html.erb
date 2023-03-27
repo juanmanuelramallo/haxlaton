@@ -1,1 +1,12 @@
-<%= render @match %>
+<div class="max-w-lg">
+  <%= render @match %>
+
+  <div class="bg-gray-50 py-2 px-4 rounded-sm">
+    <h1 class="text-2xl font-bold mb-4">Messages</h1>
+    <% if @messages.any? %>
+      <%= render @messages %>
+    <% else %>
+      <p class="text-gray-500">No ahí mensajes</p>
+    <% end %>
+  </div>
+</div>

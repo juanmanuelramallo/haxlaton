@@ -5,5 +5,6 @@ class MatchesController < ApplicationController
 
   def show
     @match = Match.find(params[:id])
+    @messages = @match.messages.includes(match_player: :player).order(sent_at: :asc).limit(100)
   end
 end
