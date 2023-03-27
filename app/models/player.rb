@@ -16,6 +16,8 @@ class Player < ApplicationRecord
   has_many :player_stats, through: :match_players
   has_secure_password validations: false
 
+  has_one_attached :avatar, dependent: :destroy
+
   validates :name, presence: true
   validates :name, uniqueness: true
   validates :elo, numericality: { greater_than_or_equal_to: 0 }
