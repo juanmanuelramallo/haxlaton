@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_10_222304) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_26_170247) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -124,6 +124,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_10_222304) do
     t.integer "duration_secs"
   end
 
+  create_table "messages", force: :cascade do |t|
+    t.bigint "match_player_id", null: false
+    t.string "body", default: "", null: false
+    t.datetime "sent_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["match_player_id"], name: "index_messages_on_match_player_id"
+  end
+
   create_table "player_stats", force: :cascade do |t|
     t.integer "goals", default: 0, null: false
     t.integer "assists", default: 0, null: false
@@ -147,5 +156,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_10_222304) do
   add_foreign_key "elo_changes", "match_players"
   add_foreign_key "match_players", "matches"
   add_foreign_key "match_players", "players"
+  add_foreign_key "messages", "match_players"
   add_foreign_key "player_stats", "match_players"
 end
