@@ -1,0 +1,9 @@
+<% if player.avatar.attached? %>
+  <div class="rounded-full w-10 h-10 overflow-hidden <%= html_classes %>">
+    <%= image_tag player.avatar %>
+  </div>
+<% else %>
+  <div class="rounded-full w-10 h-10 flex items-center justify-center bg-gray-200 <%= html_classes %>">
+    <p class="text-gray-600 font-semibold"><%= player.name[0] %></p>
+  </div>
+<% end %>

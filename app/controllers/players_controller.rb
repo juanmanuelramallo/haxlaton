@@ -233,6 +233,6 @@ class PlayersController < ApplicationController
   private
 
   def update_params
-    params.require(:player).permit(:password, :name)
+    params.require(:player).permit(:password, :name, :avatar)
   end
 end

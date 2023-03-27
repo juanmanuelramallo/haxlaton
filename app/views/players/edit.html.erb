@@ -6,6 +6,8 @@
   <p class="mb-2">Actualizado por última vez el <%= l current_player.updated_at, format: :short %></p>
 
   <%= simple_form_for @player, url: "/player", method: :put do |f| %>
+    <%= render "avatar", player: @player, html_classes: "h-16 w-16" %>
+    <%= f.input :avatar, as: :file, input_html: { accept: "image/png,image/jpeg,image/gif" } %>
     <%= f.input :name, hint: "No cambiar si estas en una sala de hax." %>
     <%= f.input :password, placeholder: "new password here", hint: "Dejalo vacío si no queres cambiarlo" %>
 
