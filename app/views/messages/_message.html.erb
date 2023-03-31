@@ -5,9 +5,9 @@
   "spectator" => "flex-1"
 } %>
 <% bg_color_class = {
-  "red" => "bg-red-200",
-  "blue" => "bg-blue-200",
-  "spectator" => "bg-gray-200"
+  "red" => "group-even:bg-red-200 group-odd:bg-red-100",
+  "blue" => "group-even:bg-blue-200 group-odd:bg-blue-100",
+  "spectator" => "group-even:bg-gray-200 group-odd:bg-gray-100"
 } %>
 <% spacing_class = {
   "red" => "mr-2",
@@ -15,7 +15,7 @@
   "spectator" => "mr-2"
 } %>
 
-<div>
+<div class="group">
   <div class="flex <%= flex_class[team] %> mb-4">
     <div class="flex <%= flex_class[team] %>">
       <%= link_to message.player do %>
