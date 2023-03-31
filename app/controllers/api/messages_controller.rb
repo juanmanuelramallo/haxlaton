@@ -2,15 +2,14 @@ module API
   class MessagesController < ApplicationController
     def create
       match = Match.find(params[:match_id])
-      match_players_by_player = match.match_players.includes(:player).to_h do |match_player|
-        [match_player.player.name, match_player]
-      end
 
       messages = messages_params.map do |message|
-        next unless match_players_by_player.keys.include?(message[:player_name])
+        player = Player.find_by(name: message[:player_name])
+        next if player.nil?
 
         {
-          match_player_id: match_players_by_player[message[:player_name]].id,
+          match_id: match.id,
+          player_id: player.id,
           body: message[:body],
           sent_at: Time.at(message[:epoch_ms].to_i / 1000)
         }

@@ -1,19 +1,34 @@
-<!-- Build a chat bubble for the +message+ variable using tailwind -->
-<% red = message.match_player.team_id == "red" %>
-<div>
-  <div class="flex <%= red ? "flex-row" : "flex-row-reverse" %> mb-4">
-    <div class="flex <%= red ? "flex-row" : "flex-row-reverse" %>">
-      <%= link_to message.match_player.player do %>
-        <%= render "players/avatar", player: message.match_player.player, html_classes: red ? "mr-2" : "ml-2" %>
+<% team = message.match_player&.team_id || "spectator" %>
+<% flex_class = {
+  "red" => "flex-row",
+  "blue" => "flex-row-reverse",
+  "spectator" => "flex-1"
+} %>
+<% bg_color_class = {
+  "red" => "group-even:bg-red-200 group-odd:bg-red-100",
+  "blue" => "group-even:bg-blue-200 group-odd:bg-blue-100",
+  "spectator" => "group-even:bg-gray-200 group-odd:bg-gray-100"
+} %>
+<% spacing_class = {
+  "red" => "mr-2",
+  "blue" => "ml-2",
+  "spectator" => "mr-2"
+} %>
+
+<div class="group">
+  <div class="flex <%= flex_class[team] %> mb-4">
+    <div class="flex <%= flex_class[team] %>">
+      <%= link_to message.player do %>
+        <%= render "players/avatar", player: message.player, html_classes: spacing_class[team] %>
       <% end %>
       <div>
-        <div class="<%= red ? "bg-red-200" : "bg-blue-200" %> rounded-lg p-2 max-w-xs">
-          <%= link_to message.match_player.player do %>
-            <p class="font-semibold text-xs text-gray-600"><%= message.match_player.player.name %></p>
+        <div class="<%= bg_color_class[team] %> rounded-lg p-2 max-w-xs">
+          <%= link_to message.player do %>
+            <p class="font-semibold text-xs text-gray-600"><%= message.player.name %></p>
           <% end %>
           <p class=""><%= message.body %></p>
         </div>
-        <p class="text-gray-600 text-sm <%= red ? "" : "text-right" %>" title="<%= l message.sent_at %>"><%= l message.sent_at, format: "%H:%M" %></p>
+        <p class="text-gray-600 text-sm <%= team == "blue" ? "text-right" : "" %>" title="<%= l message.sent_at %>"><%= l message.sent_at, format: "%H:%M" %></p>
       </div>
     </div>
   </div>
