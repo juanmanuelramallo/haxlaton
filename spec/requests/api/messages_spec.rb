@@ -35,12 +35,14 @@ RSpec.describe API::MessagesController, type: :request do
 
       expect(Message.all).to contain_exactly(
         have_attributes(
-          match_player_id: match_player.id,
+          match_id: match.id,
+          player_id: match_player.player.id,
           body: "Disculpa nostra, no te queria insultar",
           sent_at: be_an_instance_of(ActiveSupport::TimeWithZone)
         ),
         have_attributes(
-          match_player_id: other_match_player.id,
+          match_id: match.id,
+          player_id: other_match_player.player.id,
           body: "oke oke",
           sent_at: be_an_instance_of(ActiveSupport::TimeWithZone)
         )
