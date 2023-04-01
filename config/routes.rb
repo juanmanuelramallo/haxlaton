@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   end
   resource :player, only: [:edit, :update]
   resource :server
+  resources :rooms, only: [:show, :new, :create]
 
   resources :stories, only: [:index, :show], path: "historias"
 

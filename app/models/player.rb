@@ -14,6 +14,7 @@ class Player < ApplicationRecord
   has_many :elo_changes, through: :match_players
   has_many :matches, through: :match_players
   has_many :player_stats, through: :match_players
+  has_many :created_rooms, class_name: "Room", foreign_key: "created_by_id", inverse_of: :created_by, dependent: :nullify
   has_secure_password validations: false
 
   has_one_attached :avatar, dependent: :destroy

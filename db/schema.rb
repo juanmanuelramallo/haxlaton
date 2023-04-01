@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_31_022639) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_01_193628) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -155,6 +155,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_31_022639) do
     t.string "password_digest"
   end
 
+  create_table "rooms", force: :cascade do |t|
+    t.string "api_key", default: "", null: false
+    t.string "name", default: "", null: false
+    t.integer "max_players", default: 16, null: false
+    t.string "password", default: "", null: false
+    t.boolean "public", default: false, null: false
+    t.bigint "created_by_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by_id"], name: "index_rooms_on_created_by_id"
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "elo_changes", "match_players"
@@ -164,4 +176,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_31_022639) do
   add_foreign_key "messages", "matches"
   add_foreign_key "messages", "players"
   add_foreign_key "player_stats", "match_players"
+  add_foreign_key "rooms", "players", column: "created_by_id"
 end
