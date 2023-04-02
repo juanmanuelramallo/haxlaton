@@ -3,11 +3,11 @@
 # Table name: rooms
 #
 #  id            :bigint           not null, primary key
-#  api_key       :string           default("t1OtIU2Xy9xgbp8q8GSMnURaz0JCFrSD"), not null
 #  max_players   :integer          default(16), not null
 #  name          :string           default(""), not null
 #  password      :string           default(""), not null
 #  public        :boolean          default(FALSE), not null
+#  token         :string           default(""), not null
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  created_by_id :bigint           not null
@@ -23,9 +23,9 @@
 class Room < ApplicationRecord
   BUILD_PATH = Rails.root.join("lib", "haxball_client")
 
-  attribute :api_key, :string, default: -> { SecureRandom.alphanumeric(32) }
+  attribute :token, :string, default: -> { SecureRandom.alphanumeric(32) }
 
-  validates :api_key, presence: true, uniqueness: true
+  validates :token, presence: true, uniqueness: true
 
   belongs_to :created_by, class_name: "Player", foreign_key: "created_by_id", inverse_of: :created_rooms
 

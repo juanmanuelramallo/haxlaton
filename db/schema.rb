@@ -156,7 +156,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_01_193628) do
   end
 
   create_table "rooms", force: :cascade do |t|
-    t.string "api_key", default: "", null: false
+    t.string "token", default: "", null: false
     t.string "name", default: "", null: false
     t.integer "max_players", default: 16, null: false
     t.string "password", default: "", null: false
