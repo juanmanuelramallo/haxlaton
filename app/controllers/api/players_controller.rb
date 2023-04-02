@@ -1,5 +1,7 @@
 module API
   class PlayersController < ApplicationController
+    skip_before_action :authenticate!, only: [:auth]
+
     def index
       render json: Player.all
     end

@@ -2,7 +2,11 @@ require "rails_helper"
 
 RSpec.describe API::MatchesController, type: :request do
   describe "POST /api/matches" do
-    subject { post api_matches_path, params: params }
+    let(:room) { create(:room) }
+    let(:headers) { { "Authorization" => "Bearer #{room.token}" } }
+
+    subject { post api_matches_path, params: params, headers: headers }
+
 
     let(:params) do
       {
@@ -53,7 +57,7 @@ RSpec.describe API::MatchesController, type: :request do
       expect(response).to have_http_status(:created)
       expect(Match.count).to eq(1)
       expect(Match.last.match_players.count).to eq(2)
-      expect(Player.count).to eq(2)
+      expect(Player.count).to eq(3) # 2 players + 1 room owner
       expect(Match.last).to have_attributes(
         duration_secs: 72
       )
@@ -95,11 +99,12 @@ RSpec.describe API::MatchesController, type: :request do
 
       expect(Player.all).to contain_exactly(
         have_attributes(name: "El Bicho", elo: 1525),
-        have_attributes(name: "Kerry", elo: 1505)
+        have_attributes(name: "Kerry", elo: 1505),
+        be_a(Player)
       )
       expect(EloChange.all).to contain_exactly(
         have_attributes(value: 25, current_elo: 1525),
-        have_attributes(value: 5, current_elo: 1505)
+        have_attributes(value: 5, current_elo: 1505),
       )
     end
 
@@ -124,7 +129,7 @@ RSpec.describe API::MatchesController, type: :request do
         expect(response).to have_http_status(:created)
         expect(Match.count).to eq(1)
         expect(Match.last.match_players.count).to eq(2)
-        expect(Player.count).to eq(2)
+        expect(Player.count).to eq(3) # 2 players + 1 room owner
         expect(Player.where(name: "El Bicho").count).to eq(1)
         expect(PlayerStat.count).to eq(2)
       end
@@ -146,7 +151,8 @@ RSpec.describe API::MatchesController, type: :request do
 
         expect(Player.all).to contain_exactly(
           have_attributes(name: "El Bicho", elo: 1225),
-          have_attributes(name: "Kerry", elo: 1505)
+          have_attributes(name: "Kerry", elo: 1505),
+          have_attributes(name: room.created_by.name, elo: room.created_by.elo)
         )
 
         expect(EloChange.all).to contain_exactly(

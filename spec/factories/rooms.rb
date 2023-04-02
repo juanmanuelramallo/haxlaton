@@ -1,9 +1,10 @@
 FactoryBot.define do
   factory :room do
-    token { "MyString" }
-    room_name { "MyString" }
-    max_players { 1 }
-    password { "MyString" }
-    public { false }
+    token { "random-token" }
+    name { "Oke oke" }
+    max_players { 16 }
+    password { "" }
+    public { true }
+    association :created_by, factory: :player
   end
 end

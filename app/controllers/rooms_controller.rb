@@ -1,5 +1,5 @@
 class RoomsController < ApplicationController
-  before_action :authenticate_player!
+  before_action :authenticate_player!, except: :show
   skip_forgery_protection only: :show
 
   def new
@@ -28,6 +28,6 @@ class RoomsController < ApplicationController
   private
 
   def room_params
-    params.require(:room).permit(:room_name, :max_players, :password, :public)
+    params.require(:room).permit(:name, :max_players, :password, :public)
   end
 end
