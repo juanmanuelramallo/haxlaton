@@ -32,7 +32,7 @@ class Room < ApplicationRecord
   def to_javascript
     @to_javascript ||= [
       "var s=document.createElement('script');s.src='",
-      Rails.application.routes.url_helpers.room_url(self, host: ENV.fetch("HOST_NAME"), format: :js),
+      Rails.application.routes.url_helpers.room_url(self, host: ENV.fetch("HOST_NAME"), format: :js, protocol: "https"),
       "';document.body.appendChild(s)"
     ].join
   end
@@ -43,7 +43,7 @@ class Room < ApplicationRecord
         "cd",
         BUILD_PATH,
         "&& OUTFILE_NAME=#{f.path}",
-        "BASE_API_URL=#{Rails.application.routes.url_helpers.root_url(host: ENV.fetch("HOST_NAME"))}api",
+        "BASE_API_URL=#{Rails.application.routes.url_helpers.root_url(host: ENV.fetch("HOST_NAME"), protocol: "https")}api",
         client_env,
         "node #{BUILD_PATH}/build.js"].join(" ")
       system(command)
