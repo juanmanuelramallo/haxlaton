@@ -1,6 +1,9 @@
 <div class="max-w-lg border-2 border-gray-50 rounded px-8 py-5">
   <%= simple_form_for @room do |f| %>
     <%= f.input :name %>
+    <%= f.input :password, hint: "Dejar vacía para que la sala no tenga pass", as: :string %>
+    <%= f.input :max_players %>
+    <%= f.input :public %>
     <%= f.button :submit, "Crear la sala", class: "mt-2" %>
   <% end %>
 </div>

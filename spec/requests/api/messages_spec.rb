@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.describe API::MessagesController, type: :request do
   describe "POST /api/matches/:match_id/messages" do
+    let(:room) { create(:room, created_by: match_player.player) }
     let(:match) { create(:match) }
     let(:match_player) { create(:match_player, match: match) }
     let(:other_match_player) { create(:match_player, match: match) }
@@ -19,6 +20,7 @@ RSpec.describe API::MessagesController, type: :request do
         }
       ]
     end
+    let(:headers) { { "Authorization" => "Bearer #{room.token}" } }
 
     before do
       match_player
@@ -27,7 +29,7 @@ RSpec.describe API::MessagesController, type: :request do
     end
 
     subject do
-      post api_match_messages_path(match), params: { messages: messages }
+      post api_match_messages_path(match), params: { messages: messages }, headers: headers
     end
 
     it "creates two messages" do

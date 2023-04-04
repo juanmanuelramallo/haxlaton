@@ -44,9 +44,22 @@ class Room < ApplicationRecord
         BUILD_PATH,
         "&& OUTFILE_NAME=#{f.path}",
         "BASE_API_URL=#{Rails.application.routes.url_helpers.root_url(host: ENV.fetch("HOST_NAME"))}api",
+        client_env,
         "node #{BUILD_PATH}/build.js"].join(" ")
       system(command)
       f.read
     end
+  end
+
+  private
+
+  def client_env
+    @client_env ||= {
+      CLIENT_TOKEN: token,
+      CLIENT_NAME: name,
+      CLIENT_PASSWORD: password,
+      CLIENT_MAX_PLAYERS: max_players,
+      CLIENT_PUBLIC: public
+    }.map { |k, v| "#{k}='#{v}'" }.join(" ")
   end
 end

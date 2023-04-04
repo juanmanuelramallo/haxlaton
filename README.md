@@ -8,7 +8,7 @@ A server where the results of www.haxball.com matches will be stored. In Haxball
 ## Setup
 
 ### ENV vars
-Create a file `.env` and add `HOST_NAME=www.haxball.com` entry.
+Create a file `.env` and add `HOST_NAME=` entry. This is the actual host name where the app is run (i.e. haxlaton.dokku.1ma.dev)
 
 ### Install
 Execute the next commands:
@@ -26,4 +26,6 @@ Now you're ready to get the server up and running
 bundle exec rails s
 ```
 
-Enjoy!
+## Haxball client
+
+Run the server, create a room and follow the instruction to get the haxball client script.
