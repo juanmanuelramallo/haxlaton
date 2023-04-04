@@ -1,0 +1,14 @@
+<div class="max-w-lg border-2 border-gray-50 rounded px-8 py-5">
+  <h1 class="text-2xl font-bold mb-4">Sala</h1>
+  <p class="mb-4">
+    <%= @room.name %>
+  </p>
+
+  <div class="max-h-32 overflow-hidden bg-gray-50 p-2 rounded" data-controller="clipboard" data-clipboard-success-content="Copiado!">
+    <button class="text-blue-500 hover:underline hover:cursor-pointer block" type="button" data-action="clipboard#copy" data-clipboard-target="button">Copiar</button>
+
+    <code class="text-xs" data-clipboard-target="source">
+      <%= @room.to_javascript %>
+    </code>
+  </div>
+</div>
