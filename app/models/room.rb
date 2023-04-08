@@ -2,15 +2,16 @@
 #
 # Table name: rooms
 #
-#  id            :bigint           not null, primary key
-#  max_players   :integer          default(16), not null
-#  name          :string           default(""), not null
-#  password      :string           default(""), not null
-#  public        :boolean          default(FALSE), not null
-#  token         :string           default(""), not null
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  created_by_id :bigint           not null
+#  id               :bigint           not null, primary key
+#  haxball_room_url :string
+#  max_players      :integer          default(16), not null
+#  name             :string           default(""), not null
+#  password         :string           default(""), not null
+#  public           :boolean          default(FALSE), not null
+#  token            :string           default("Lv0pXgrmIJddAY17670WfjpO0e33NJbz"), not null
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  created_by_id    :bigint           not null
 #
 # Indexes
 #
@@ -29,10 +30,12 @@ class Room < ApplicationRecord
 
   belongs_to :created_by, class_name: "Player", foreign_key: "created_by_id", inverse_of: :created_rooms
 
+  broadcasts
+
   def to_javascript
     @to_javascript ||= [
       "var s=document.createElement('script');s.src='",
-      Rails.application.routes.url_helpers.room_url(self, host: ENV.fetch("HOST_NAME"), format: :js, protocol: "https"),
+      Rails.application.routes.url_helpers.script_room_url(self, host: ENV.fetch("HOST_NAME"), format: :js, protocol: "https"),
       "';document.body.appendChild(s)"
     ].join
   end

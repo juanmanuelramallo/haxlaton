@@ -1,0 +1,10 @@
+<div id="<%= dom_id(room) %>">
+  <% if room.haxball_room_url.present? %>
+    <%= link_to "Entrar a la sala", room.haxball_room_url, class: "text-blue-500 hover:underline hover:cursor-pointer", target: :_blank %>
+  <% else %>
+    <span class="text-gray-500">Eserando <span class="animate-ping">q</span>ue <%= room.created_by.name %> cree la sala en Haxball</span>
+    <div class="animate-pulse mt-1">
+      <div class="bg-slate-300 h-5 rounded-full w-32"></div>
+    </div>
+  <% end %>
+</div>
