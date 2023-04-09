@@ -25,6 +25,9 @@ class RoomsController < ApplicationController
     if @room.update(room_params)
       if @room.haxball_room_url_previously_changed? && @room.haxball_room_url.present?
         RoomNotification.with({room_id: @room.id}).deliver(current_player)
+        Player.where.not(slack_user_id: [nil, ""]).each do |player|
+          RoomNotification.with({room_id: @room.id, channel: player.slack_user_id}).deliver(player)
+        end
       end
 
       redirect_to @room
