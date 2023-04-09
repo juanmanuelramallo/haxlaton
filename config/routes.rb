@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     resources :players, only: [:index] do
       post :auth, on: :collection
     end
+    resource :room, only: :update
   end
 
   resource :session, only: [:new, :create, :destroy]
