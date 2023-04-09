@@ -8,6 +8,7 @@
 #  password_digest :string
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  slack_user_id   :string
 #
 class Player < ApplicationRecord
   has_many :match_players, dependent: :destroy

@@ -8,7 +8,7 @@
 #  name             :string           default(""), not null
 #  password         :string           default(""), not null
 #  public           :boolean          default(FALSE), not null
-#  token            :string           default("Lv0pXgrmIJddAY17670WfjpO0e33NJbz"), not null
+#  token            :string           default("yR9BPmy4WmPvcDjdjosmvhadRCrGOqk3"), not null
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  created_by_id    :bigint           not null
@@ -25,6 +25,7 @@ class Room < ApplicationRecord
   BUILD_PATH = Rails.root.join("lib", "haxball_client")
 
   attribute :token, :string, default: -> { SecureRandom.alphanumeric(32) }
+  attribute :name, :string, default: -> { ["Longaniza", "Longardo", "Longuito", "Long"].sample }
 
   validates :token, presence: true, uniqueness: true
 

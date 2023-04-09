@@ -8,7 +8,8 @@
   <%= simple_form_for @player, url: "/player", method: :put do |f| %>
     <%= render "avatar", player: @player, html_classes: "h-16 w-16" %>
     <%= f.input :avatar, as: :file, input_html: { accept: "image/png,image/jpeg,image/gif" } %>
-    <%= f.input :name, hint: "No cambiar si estas en una sala de hax." %>
+    <%= f.input :name, hint: "No cambiar si estas en una sala de hax" %>
+    <%= f.input :slack_user_id, hint: "Configura tu slack user para recibir una notificación privada via Slack cuando haya una sala nueva. Para conseguir tu Slack user: Abre tu perfil en Slack, click en los tres puntitos, y finalmente en \"Copy Member ID\"" %>
     <%= f.input :password, placeholder: "new password here", hint: "Dejalo vacío si no queres cambiarlo" %>
 
     <%= f.button :submit, "Oke oke, save" %>

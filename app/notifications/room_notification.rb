@@ -8,7 +8,7 @@ class RoomNotification < ApplicationNotification
   end
 
   def channel
-    params[:channel] || DEFAULT_CHANNEL
+    params[:channel] || ENV.fetch("SLACK_CHANNEL", DEFAULT_CHANNEL)
   end
 
   def to_slack
@@ -19,7 +19,7 @@ class RoomNotification < ApplicationNotification
           type: "section",
           text: {
             type: "mrkdwn",
-            text: "Nueva sala <!channel>\nCreada por <#{player_url(room.created_by, host: ENV.fetch("HOST_NAME"))}|#{room.created_by.name}>",
+            text: "#{at_channel}<#{player_url(room.created_by, host: ENV.fetch("HOST_NAME"))}|#{room.created_by.name}> creó la sala *#{room.name}*\n#{room_url(room, redirect: true, host: ENV.fetch("HOST_NAME"))}",
           },
           accessory: {
             type: "button",
@@ -35,5 +35,11 @@ class RoomNotification < ApplicationNotification
         }
       ]
     }
+  end
+
+  private
+
+  def at_channel
+    "<!channel>\n" if params[:channel].blank?
   end
 end
