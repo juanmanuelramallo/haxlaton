@@ -11,12 +11,12 @@
       </div>
 
       <%= simple_form_for @room do |f| %>
-        <%= f.input :haxball_room_url, hint: "Pegar la URL generada por haxball.com/headless" %>
+        <%= f.input :haxball_room_url, hint: "Se actualiza automaticamente al generar la sala en haxball.com. Pegar la URL generada por haxball.com/headless solo si es necesario." %>
 
         <%= f.submit "Guardar y enviar a Slack", class: "text-blue-500 hover:underline hover:cursor-pointer mb-4" %>
       <% end %>
-  </div>
-<% end %>
+    </div>
+  <% end %>
 
   <div class="mb-2">
     <%= turbo_stream_from @room %>
