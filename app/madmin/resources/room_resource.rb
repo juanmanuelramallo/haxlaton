@@ -1,16 +1,17 @@
-class PlayerResource < Madmin::Resource
+class RoomResource < Madmin::Resource
   # Attributes
   attribute :id, form: false
+  attribute :token
   attribute :name
-  attribute :elo
-  attribute :slack_user_id, index: false
-  attribute :password, index: false, show: false
+  attribute :max_players
+  attribute :password
+  attribute :public
   attribute :created_at, form: false
   attribute :updated_at, form: false
+  attribute :haxball_room_url
 
   # Associations
-  attribute :match_players, form: false
-  attribute :matches, form: false
+  attribute :created_by
 
   # Uncomment this to customize the display name of records in the admin area.
   # def self.display_name(record)
